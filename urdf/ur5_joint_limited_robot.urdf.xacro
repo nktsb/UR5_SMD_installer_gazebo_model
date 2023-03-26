@@ -4,21 +4,21 @@
 
   <!-- common stuff -->
   <!-- <xacro:include filename="$(find ur5_vacuum)/urdf/common.gazebo.xacro" /> -->
-  <xacro:include filename="$(find ur5_vacuum)/urdf/ur5.material.xacro" />
+  <xacro:include filename="$(find subbotinny_ur5_vacuum)/urdf/ur5.material.xacro" />
   <!-- ur5 -->
-  <xacro:include filename="$(find ur5_vacuum)/urdf/ur5.urdf.xacro" />
+  <xacro:include filename="$(find subbotinny_ur5_vacuum)/urdf/ur5.urdf.xacro" />
 
   <xacro:macro name="box" params="suffix x y">
     <link name="box_${suffix}">
       <visual>
         <geometry>
-          <mesh scale = "0.005 0.005 0.005" filename="package://ur5_vacuum/meshes/box.stl"/>
+          <mesh scale = "0.005 0.005 0.005" filename="package://subbotinny_ur5_vacuum/meshes/box.stl"/>
         </geometry>
         <xacro:insert_block name="pink" />
       </visual>
       <collision>
         <geometry>
-          <mesh scale = "0.005 0.005 0.005" filename="package://ur5_vacuum/meshes/box.stl"/>
+          <mesh scale = "0.005 0.005 0.005" filename="package://subbotinny_ur5_vacuum/meshes/box.stl"/>
         </geometry>
       </collision>
     </link>
@@ -79,13 +79,13 @@
   <link name="PCB">
     <visual>
       <geometry>
-        <mesh scale = "0.0025 0.0025 0.0025" filename="package://ur5_vacuum/meshes/board.stl" />
+        <mesh scale = "0.0025 0.0025 0.0025" filename="package://subbotinny_ur5_vacuum/meshes/board.stl" />
       </geometry>
       <xacro:insert_block name="white" />
     </visual>
     <collision>
       <geometry>
-        <mesh scale = "0.0025 0.0025 0.0025" filename="package://ur5_vacuum/meshes/board.stl" />
+        <mesh scale = "0.0025 0.0025 0.0025" filename="package://subbotinny_ur5_vacuum/meshes/board.stl" />
       </geometry>
     </collision>
   </link>

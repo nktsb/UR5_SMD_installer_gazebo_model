@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!--xacro:include filename="$(find ur5_vacuum)/urdf/ur.transmission.xacro" /-->
-  <xacro:include filename="$(find ur5_vacuum)/urdf/common.gazebo.xacro" />
+  <xacro:include filename="$(find subbotinny_ur5_vacuum)/urdf/common.gazebo.xacro" />
 
   <!-- Inertia parameters -->
   <xacro:property name="base_mass" value="4.0" />  <!-- This mass might be incorrect -->
