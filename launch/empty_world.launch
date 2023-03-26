@@ -1,0 +1,23 @@
+<launch>
+
+    <!-- Launch Gazebo -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="paused" value="false"/>
+        <arg name="use_sim_time" value="true"/>
+        <arg name="gui" value="true"/>
+        <arg name="recording" value="false"/>
+        <arg name="debug" value="false"/>
+    </include>
+
+    <!-- Generate/Load robot description file -->
+    <include file="$(find ur5_vacuum)/launch/description.launch"/>
+
+    <!-- Spawn urdf into Gazebo -->
+    <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -model ur5 -param robot_description" respawn="false" />
+
+    <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+    <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d '$(find ur5_vacuum)/rviz/ur5.rviz'" />
+
+</launch>

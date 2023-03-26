@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro"
+       name="ur5" >
+
+  <!-- common stuff -->
+  <!-- <xacro:include filename="$(find ur5_vacuum)/urdf/common.gazebo.xacro" /> -->
+  <xacro:include filename="$(find ur5_vacuum)/urdf/ur5.material.xacro" />
+  <!-- ur5 -->
+  <xacro:include filename="$(find ur5_vacuum)/urdf/ur5.urdf.xacro" />
+
+  <xacro:macro name="box" params="suffix x y">
+    <link name="box_${suffix}">
+      <visual>
+        <geometry>
+          <mesh scale = "0.005 0.005 0.005" filename="package://ur5_vacuum/meshes/box.stl"/>
+        </geometry>
+        <xacro:insert_block name="pink" />
+      </visual>
+      <collision>
+        <geometry>
+          <mesh scale = "0.005 0.005 0.005" filename="package://ur5_vacuum/meshes/box.stl"/>
+        </geometry>
+      </collision>
+    </link>
+    <joint name="box_${suffix}_joint" type="fixed">
+      <parent link="table" />
+      <child link="box_${suffix}" />
+      <origin xyz="${x * -0.1} ${y * -0.1} 0.2" />
+    </joint>
+  </xacro:macro>
+
+  <!-- arm -->
+  <xacro:ur5_robot prefix="" joint_limited="true"
+    shoulder_pan_lower_limit="${-2*pi}" shoulder_pan_upper_limit="${2*pi}"
+    shoulder_lift_lower_limit="${-pi}" shoulder_lift_upper_limit="${pi}"
+    elbow_joint_lower_limit="${-pi}" elbow_joint_upper_limit="${pi}"
+    wrist_1_lower_limit="${-pi}" wrist_1_upper_limit="${pi}"
+    wrist_2_lower_limit="${-pi}" wrist_2_upper_limit="${pi}"
+    wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
+  />
+  <link name="world" />
+
+
+
+  <link name="table">
+    <visual>
+      <geometry>
+        <box size="1 1 0.2" />
+      </geometry>
+      <origin xyz="0 0 0.1" />
+        <xacro:insert_block name="pastel_blue" />
+    </visual>
+
+    <collision>
+      <geometry>
+        <box size="1 1 0.2" />
+      </geometry>
+      <origin xyz="0 0 0.1" />
+    </collision>
+
+  </link>
+
+  <joint name="world_joint" type="fixed">
+    <parent link="world" />
+    <child link = "table" />
+    <origin xyz="0 0 0" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <joint name="table_joint" type="fixed">
+    <parent link="table" />
+    <child link = "base_link" />
+    <origin xyz="0.4 0 0.2" rpy="0.0 0.0 0.0" />
+  </joint> >
+
+  <xacro:box suffix="1" x="1" y="2" />
+  <xacro:box suffix="2" x="2" y="2" />
+  <xacro:box suffix="3" x="3" y="2" />
+
+  <link name="PCB">
+    <visual>
+      <geometry>
+        <mesh scale = "0.0025 0.0025 0.0025" filename="package://ur5_vacuum/meshes/board.stl" />
+      </geometry>
+      <xacro:insert_block name="white" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh scale = "0.0025 0.0025 0.0025" filename="package://ur5_vacuum/meshes/board.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="board_joint" type="fixed">
+    <parent link="table" />
+    <child link="PCB" />
+    <origin xyz="-0.1 0.1 0.205" rpy="0.0 0.0 ${pi/2}"/>
+  </joint>
+
+</robot>
