@@ -7,7 +7,8 @@
   <xacro:include filename="$(find subbotinny_ur5_vacuum)/urdf/ur5.material.xacro" />
   <!-- ur5 -->
   <xacro:include filename="$(find subbotinny_ur5_vacuum)/urdf/ur5.urdf.xacro" />
-
+  <xacro:include filename="$(find subbotinny_ur5_vacuum)/urdf/common.gazebo.xacro" />
+  
   <xacro:macro name="box" params="suffix x y">
     <link name="box_${suffix}">
       <visual>
@@ -76,6 +77,35 @@
   <xacro:box suffix="2" x="2" y="2" />
   <xacro:box suffix="3" x="3" y="2" />
 
+  <link name="camera_stand">
+    <visual>
+      <geometry>
+        <cylinder length="0.025" radius="0.1" />
+      </geometry>
+      <origin xyz="0 0 0" />
+      <xacro:insert_block name="pastel_blue" />
+    </visual>
+
+    <collision>
+      <geometry>
+        <cylinder length="0.025" radius="0.1" />
+      </geometry>
+      <origin xyz="0 0 0" />
+    </collision>
+  </link>
+  <joint name="camera_stand_joint" type="fixed">
+    <parent link="table" />
+    <child link="camera_stand" />
+    <origin xyz="-0.2 0 0.2125" rpy="0 0 0" />
+  </joint>
+
+  <link name="camera" />
+  <joint name="camera_joint" type="fixed">
+    <parent link="camera_stand" />
+    <child link="camera" />
+    <origin xyz="0 0 0.05" rpy="0 ${radians(-90)} 0" />
+  </joint>
+
   <link name="PCB">
     <visual>
       <geometry>
@@ -92,7 +122,7 @@
   <joint name="board_joint" type="fixed">
     <parent link="table" />
     <child link="PCB" />
-    <origin xyz="-0.1 0.1 0.205" rpy="0.0 0.0 ${pi/2}"/>
+    <origin xyz="-0.1 0.2 0.205" rpy="0.0 0.0 ${pi/2}"/>
   </joint>
 
 </robot>
