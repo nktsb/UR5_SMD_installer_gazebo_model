@@ -2,7 +2,7 @@
     <rosparam file="$(find subbotinny_ur5_vacuum)/config/ur5_control.yaml" command="load"/>
 
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-    output="screen" ns="/ur5_sub" args=" wrist_1_position_controller wrist_2_position_controller wrist_3_position_controller"/>
+    output="screen" ns="/ur5_sub" args=" shoulder_pan_position_controller shoulder_lift_position_controller elbow_position_controller wrist_1_position_controller wrist_2_position_controller wrist_3_position_controller"/>
 
     <!-- Launch Gazebo -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -13,8 +13,10 @@
         <arg name="debug" value="false"/>
     </include>
 
+    <!--
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
-    <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/> 
+    -->
 
     <include file="$(find subbotinny_ur5_vacuum)/launch/description.launch"/>
     <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -model ur5 -param robot_description" respawn="false" />
