@@ -8,7 +8,8 @@
   <!-- ur5 -->
   <xacro:include filename="$(find subbotinny_ur5_vacuum)/urdf/ur5.urdf.xacro" />
   <xacro:include filename="$(find subbotinny_ur5_vacuum)/urdf/common.gazebo.xacro" />
-  
+  <xacro:include filename="$(find subbotinny_ur5_vacuum)/urdf/pcb_components.urdf.xacro" />
+
   <xacro:macro name="box" params="suffix x y">
     <link name="box_${suffix}">
       <visual>
@@ -76,6 +77,7 @@
   <xacro:box suffix="1" x="1" y="2" />
   <xacro:box suffix="2" x="2" y="2" />
   <xacro:box suffix="3" x="3" y="2" />
+  <!-- <xacro:rc0805 prefix="1" box_num="3"/> -->
 
   <link name="camera_stand">
     <visual>

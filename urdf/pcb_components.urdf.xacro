@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find subbotinny_ur5_vacuum)/urdf/ur5.material.xacro" />
+
+  <xacro:macro name="rc0805" params="prefix box_num">
+
+    <link name="${prefix}_component" >
+      <visual>
+        <geometry>
+          <box size="0.01 0.01 0.01" />
+        </geometry>
+        <xacro:insert_block name="white" />
+      </visual>
+      <collision>
+        <geometry>
+          <box size="0.01 0.01 0.01" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}_component_joint" type="floating">
+      <parent link="box_${box_num}" />
+      <child link = "${prefix}_component" />
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+    </joint>
+
+  </xacro:macro>
+</robot>

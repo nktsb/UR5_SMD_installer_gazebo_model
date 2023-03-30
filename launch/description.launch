@@ -1,6 +1,6 @@
 <launch>
 
     <!-- Generate/Load robot description file -->
-    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find subbotinny_ur5_vacuum)/urdf/ur5_joint_limited_robot.urdf.xacro'" />
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find subbotinny_ur5_vacuum)/urdf/ur5_pcb_table.urdf.xacro'" />
 
 </launch>
