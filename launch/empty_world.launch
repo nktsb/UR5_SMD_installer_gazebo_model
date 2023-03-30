@@ -14,14 +14,13 @@
     </include>
 
     <!--
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>   -->
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/> 
-    -->
+
 
     <include file="$(find subbotinny_ur5_vacuum)/launch/description.launch"/>
     <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -model ur5 -param robot_description" respawn="false" />
 
-    <!-- node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d '$(find subbotinny_ur5_vacuum)/rviz/ur5.rviz'" / -->
-
+    <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d '$(find subbotinny_ur5_vacuum)/rviz/ur5.rviz'" />
 
 </launch>
