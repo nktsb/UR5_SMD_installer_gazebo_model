@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
+
+  <gazebo reference="table">
+    <minDepth>0.001</minDepth>
+    <material>Gazebo/SkyBlue</material>
+  </gazebo>
+
   <gazebo>
     <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
       <robotNamespace>/ur5_sub</robotNamespace>
@@ -11,9 +17,9 @@
       <robotNamespace>/ur5_sub</robotNamespace>
       <bodyName>vacuum_gripper</bodyName>
       <topicName>grasping</topicName>
-      <maxForce>50</maxForce>
-      <maxDistance>0.05</maxDistance>
-      <minDistance>0.01</minDistance>
+      <maxForce>1000</maxForce>
+      <maxDistance>5</maxDistance>
+      <minDistance>0.001</minDistance>
     </plugin>
   
   </gazebo>
