@@ -8,7 +8,6 @@
   <!-- ur5 -->
   <xacro:include filename="$(find subbotinny_ur5_vacuum)/urdf/ur5.urdf.xacro" />
   <xacro:include filename="$(find subbotinny_ur5_vacuum)/urdf/common.gazebo.xacro" />
-  <xacro:include filename="$(find subbotinny_ur5_vacuum)/urdf/pcb_components.urdf.xacro" />
 
   <!-- arm -->
   <xacro:ur5_robot prefix="" joint_limited="true"
@@ -31,7 +30,7 @@
   <joint name="camera_joint" type="fixed">
     <parent link="world" />
     <child link="camera" />
-    <origin xyz="0 0.4 0.11" rpy="0 ${radians(-90)} 0" />
+    <origin xyz="0 0.3 0.2" rpy="0 ${radians(-90)} 0" />
   </joint>
 
 </robot>

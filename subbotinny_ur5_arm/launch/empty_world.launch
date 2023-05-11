@@ -11,7 +11,6 @@
     <!-- Launch Gazebo -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg name="world_name" value="$(arg world_name)" />
-        <arg name="paused" value="true"/>
         <arg name="use_sim_time" value="true"/>
         <arg name="gui" value="true"/>
         <arg name="recording" value="false"/>
@@ -21,7 +20,7 @@
     <include file="$(find subbotinny_ur5_vacuum)/launch/description.launch"/>
     <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -model ur5 -param robot_description" respawn="false" />
 
-    <!-- <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d '$(find subbotinny_ur5_vacuum)/rviz/ur5.rviz'" /> -->
+    <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d '$(find subbotinny_ur5_vacuum)/rviz/ur5.rviz'" />
     <!-- <node name="move_to_camera" pkg="subbotinny_ur5_vacuum" type="move_to_camera.py" output="screen" /> -->
 
 </launch>
