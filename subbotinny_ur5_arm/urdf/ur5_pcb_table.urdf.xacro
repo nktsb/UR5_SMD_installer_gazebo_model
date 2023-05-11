@@ -28,9 +28,9 @@
 
   <link name="camera" />
   <joint name="camera_joint" type="fixed">
-    <parent link="world" />
+    <parent link="base_link" />
     <child link="camera" />
-    <origin xyz="0 0.3 0.2" rpy="0 ${radians(-90)} 0" />
+    <origin xyz="0 0.7 0.01" rpy="0 ${radians(-90)} 0" />
   </joint>
-
+  <xacro:ur5_gazebo/>
 </robot>
