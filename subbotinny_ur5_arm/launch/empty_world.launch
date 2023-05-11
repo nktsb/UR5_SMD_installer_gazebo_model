@@ -1,4 +1,5 @@
 <launch>
+    <arg name="world_name" default="$(find subbotinny_ur5_table)/worlds/ur5_table.world" />
     <rosparam file="$(find subbotinny_ur5_vacuum)/config/ur5_control.yaml" command="load"/>
 
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
@@ -9,6 +10,7 @@
 
     <!-- Launch Gazebo -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(arg world_name)" />
         <arg name="paused" value="true"/>
         <arg name="use_sim_time" value="true"/>
         <arg name="gui" value="true"/>
