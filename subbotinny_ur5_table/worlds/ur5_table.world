@@ -66,27 +66,114 @@
     </model>
     <model name="box_1">
       <static>true</static>
-      <pose>0.4 0.35 0.115 0 0 0</pose>
+      <pose>0.2 0.35 0.1 0 0 1.570796</pose>
       <link name="link">
         <collision name="collision">
           <geometry>
             <mesh>
-              <uri>package://subbotinny_ur5_table/meshes/box.stl</uri>
-              <scale>1 1 1</scale>
+              <uri>model://box.stl</uri>
+              <scale>0.001 0.001 0.001</scale>
             </mesh>
           </geometry>
         </collision>
         <visual name="visual">
           <geometry>
             <mesh>
-              <uri>package://subbotinny_ur5_table/meshes/box.stl</uri>
-              <scale>1 1 1</scale>
+              <uri>model://box.stl</uri>
+              <scale>0.001 0.001 0.001</scale>
             </mesh>
           </geometry>
           <material>
             <script>
               <uri>file://media/materials/scripts/gazebo.material</uri>
               <name>Gazebo/SkyBlue</name>
+            </script>
+          </material>
+          <meta> <layer> 1 </layer></meta>
+        </visual>
+      </link>
+    </model>
+    <model name="box_2">
+      <static>true</static>
+      <pose>0.2 0.25 0.1 0 0 1.570796</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>model://box.stl</uri>
+              <scale>0.001 0.001 0.001</scale>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>model://box.stl</uri>
+              <scale>0.001 0.001 0.001</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/SkyBlue</name>
+            </script>
+          </material>
+          <meta> <layer> 1 </layer></meta>
+        </visual>
+      </link>
+    </model>
+    <model name="box_3">
+      <static>true</static>
+      <pose>0.2 0.15 0.1 0 0 1.570796</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>model://box.stl</uri>
+              <scale>0.001 0.001 0.001</scale>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>model://box.stl</uri>
+              <scale>0.001 0.001 0.001</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/SkyBlue</name>
+            </script>
+          </material>
+          <meta> <layer> 1 </layer></meta>
+        </visual>
+      </link>
+    </model>
+        <model name="board">
+      <static>true</static>
+      <pose>-0.2 0.25 0.101 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>model://board.stl</uri>
+              <scale>0.001 0.001 0.001</scale>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>model://board.stl</uri>
+              <scale>0.001 0.001 0.001</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Orange</name>
             </script>
           </material>
           <meta> <layer> 1 </layer></meta>

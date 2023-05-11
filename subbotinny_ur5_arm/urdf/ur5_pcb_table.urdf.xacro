@@ -2,12 +2,8 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro"
        name="ur5" >
 
-  <!-- common stuff -->
-  <!-- <xacro:include filename="$(find ur5_vacuum)/urdf/common.gazebo.xacro" /> -->
-  <xacro:include filename="$(find subbotinny_ur5_vacuum)/urdf/ur5.material.xacro" />
-  <!-- ur5 -->
-  <xacro:include filename="$(find subbotinny_ur5_vacuum)/urdf/ur5.urdf.xacro" />
-  <xacro:include filename="$(find subbotinny_ur5_vacuum)/urdf/common.gazebo.xacro" />
+  <xacro:include filename="$(find subbotinny_ur5_arm)/urdf/ur5.urdf.xacro" />
+  <xacro:include filename="$(find subbotinny_ur5_arm)/urdf/common.gazebo.xacro" />
 
   <!-- arm -->
   <xacro:ur5_robot prefix="" joint_limited="true"
@@ -18,12 +14,13 @@
     wrist_2_lower_limit="${-pi}" wrist_2_upper_limit="${pi}"
     wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
   />
+
   <link name="world" />
-  <!-- <xacro:rc0805 prefix="1" box_num="3"/> -->
+
   <joint name="world_joint" type="fixed">
     <parent link="world" />
     <child link = "base_link" />
-    <origin xyz="0 -0.4 0.105" rpy="0.0 0.0 0.0" />
+    <origin xyz="0 -0.3 0.105" rpy="0.0 0.0 0.0" />
   </joint>
 
   <link name="camera" />

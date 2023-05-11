@@ -1,6 +1,6 @@
 <launch>
     <arg name="world_name" default="$(find subbotinny_ur5_table)/worlds/ur5_table.world" />
-    <rosparam file="$(find subbotinny_ur5_vacuum)/config/ur5_control.yaml" command="load"/>
+    <rosparam file="$(find subbotinny_ur5_arm)/config/ur5_control.yaml" command="load"/>
 
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
@@ -17,10 +17,10 @@
         <arg name="debug" value="false"/>
     </include>
 
-    <include file="$(find subbotinny_ur5_vacuum)/launch/description.launch"/>
+    <include file="$(find subbotinny_ur5_arm)/launch/description.launch"/>
     <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -model ur5 -param robot_description" respawn="false" />
 
-    <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d '$(find subbotinny_ur5_vacuum)/rviz/ur5.rviz'" />
-    <!-- <node name="move_to_camera" pkg="subbotinny_ur5_vacuum" type="move_to_camera.py" output="screen" /> -->
+    <!-- <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d '$(find subbotinny_ur5_arm)/rviz/ur5.rviz'" /> -->
+    <!-- <node name="move_to_camera" pkg="subbotinny_ur5_arm" type="move_to_camera.py" output="screen" /> -->
 
 </launch>
