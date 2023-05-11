@@ -89,6 +89,7 @@
               <name>Gazebo/SkyBlue</name>
             </script>
           </material>
+          <meta> <layer> 1 </layer></meta>
         </visual>
       </link>
     </model>
