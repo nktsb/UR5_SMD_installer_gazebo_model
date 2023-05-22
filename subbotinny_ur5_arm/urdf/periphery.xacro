@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<robot xmlns:xacro="http://ros.org/wiki/xacro"
-       name="periphery" >
-
-       <xacro:macro name="ur_arm_transmission" params="prefix">
-       <link name = "box_${prefix}">
-       </link>
-       </xacro:macro>
-</robot>
