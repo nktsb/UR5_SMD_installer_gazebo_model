@@ -4,7 +4,7 @@
   <xacro:macro name = "ur5_gazebo">
     <gazebo>
       <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
-        <robotNamespace>/ur5_sub</robotNamespace>
+        <robotNamespace>/</robotNamespace>
       </plugin>
     </gazebo>
     <gazebo>
