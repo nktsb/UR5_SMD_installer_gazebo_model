@@ -5,9 +5,6 @@
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
 
-    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-    output="screen" args="joint_state_controller shoulder_pan_position_controller shoulder_lift_position_controller elbow_position_controller wrist_1_position_controller wrist_2_position_controller wrist_3_position_controller"/>
-
     <!-- Launch Gazebo -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg name="world_name" value="$(arg world_name)" />
@@ -18,7 +15,15 @@
     </include>
 
     <include file="$(find ur5_vacuum_robot)/launch/description.launch"/>
-    <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -model ur5 -param robot_description" respawn="false" />
+    <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -model ur5 -param robot_description -J shoulder_lift_joint -1.57 -unpause" respawn="false" />
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
+    args="joint_state_controller
+          shoulder_pan_joint_position
+          shoulder_lift_joint_position
+          elbow_joint_position
+          wrist_1_joint_position
+          wrist_2_joint_position
+          wrist_3_joint_position" />
 
     <!-- <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d '$(find ur5_vacuum_robot)/rviz/ur5.rviz'" /> -->
     <!-- <node name="move_to_camera" pkg="ur5_vacuum_robot" type="move_to_camera.py" output="screen" /> -->

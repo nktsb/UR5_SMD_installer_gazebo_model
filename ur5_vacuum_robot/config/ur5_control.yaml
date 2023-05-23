@@ -1,32 +1,46 @@
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
 
-  # Publish all joint states -----------------------------------
-  joint_state_controller:
-    type: joint_state_controller/JointStateController
-    publish_rate: 50  
-  
-  # Position Controllers ---------------------------------------
-  # HEAD
-  shoulder_pan_position_controller:
-    type: effort_controllers/JointPositionController
-    joint: shoulder_pan_joint
-    pid: {p: 100.0, i: 0.5, d: 50.0}
-  shoulder_lift_position_controller:
-    type: effort_controllers/JointPositionController
-    joint: shoulder_lift_joint
-    pid: {p: 100.0, i: 0.5, d: 50.0}
-  elbow_position_controller:
-    type: effort_controllers/JointPositionController
-    joint: elbow_joint
-    pid: {p: 100.0, i: 0.5, d: 50.0}
-  wrist_1_position_controller:
-    type: effort_controllers/JointPositionController
-    joint: wrist_1_joint
-    pid: {p: 100.0, i: 0.5, d: 50.0}
-  wrist_2_position_controller:
-    type: effort_controllers/JointPositionController
-    joint: wrist_2_joint
-    pid: {p: 100.0, i: 0.5, d: 50.0}
-  wrist_3_position_controller:
-    type: effort_controllers/JointPositionController
-    joint: wrist_3_joint
-    pid: {p: 100.0, i: 0.5, d: 50.0}
+shoulder_pan_joint_position:
+  type: position_controllers/JointPositionController
+  joint: shoulder_pan_joint
+  p: 100
+  d: 1
+  i: 50
+  i_clamp: 1
+shoulder_lift_joint_position:
+  type: position_controllers/JointPositionController
+  joint: shoulder_lift_joint
+  p: 100
+  d: 1
+  i: 50
+  i_clamp: 1
+elbow_joint_position:
+  type: position_controllers/JointPositionController
+  joint: elbow_joint
+  p: 100
+  d: 1
+  i: 50
+  i_clamp: 1
+wrist_1_joint_position:
+  type: position_controllers/JointPositionController
+  joint: wrist_1_joint
+  p: 100
+  d: 1
+  i: 50
+  i_clamp: 1
+wrist_2_joint_position:
+  type: position_controllers/JointPositionController
+  joint: wrist_2_joint
+  p: 100
+  d: 1
+  i: 50
+  i_clamp: 1
+wrist_3_joint_position:
+  type: position_controllers/JointPositionController
+  joint: wrist_3_joint
+  p: 100
+  d: 1
+  i: 50
+  i_clamp: 1

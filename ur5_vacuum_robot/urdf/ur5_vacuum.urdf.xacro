@@ -2,9 +2,9 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro"
        name="ur5" >
        
+  <xacro:include filename="$(find ur_description)/urdf/common.gazebo.xacro" />
   <xacro:include filename="$(find ur_description)/urdf/ur5.urdf.xacro" />
-  <xacro:include filename="$(find ur5_vacuum_robot)/urdf/common.gazebo.xacro" />
-
+  <xacro:include filename="$(find ur5_vacuum_robot)/urdf/ur5_gazebo.xacro" />
   
   <link name="world" />
  
@@ -16,7 +16,7 @@
     wrist_1_lower_limit="${-pi}" wrist_1_upper_limit="${pi}"
     wrist_2_lower_limit="${-pi}" wrist_2_upper_limit="${pi}"
     wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
-    transmission_hw_interface = "hardware_interface/EffortJointInterface"
+    transmission_hw_interface = "hardware_interface/PositionJointInterface"
   />
   <joint name="world_joint" type="fixed">
     <parent link="world" />

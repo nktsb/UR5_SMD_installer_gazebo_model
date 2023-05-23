@@ -3,11 +3,6 @@
 
   <xacro:macro name = "ur5_gazebo">
     <gazebo>
-      <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
-        <robotNamespace>/</robotNamespace>
-      </plugin>
-    </gazebo>
-    <gazebo>
       <plugin name="gazebo_ros_vacuum_gripper" filename="libgazebo_ros_vacuum_gripper.so">
         <robotNamespace>/ur5_sub/vacuum_gripper</robotNamespace>
         <bodyName>vacuum_gripper</bodyName>
