@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: ur5_vacuum_robot
+    relative_path: urdf/ur5_vacuum.urdf.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/ur5.srdf
+  CONFIG:
+    author_name: subbotinny
+    author_email: neymarus@yandex.ru
+    generated_timestamp: 1684882665
