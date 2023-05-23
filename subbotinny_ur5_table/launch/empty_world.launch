@@ -1,9 +1,0 @@
-<launch>
-    <arg name="world_name" default="$(find subbotinny_ur5_table)/worlds/ur5_table.world" />
-
-    <!-- Launch Gazebo -->
-    <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <arg name="world_name" value="$(arg world_name)" />
-    </include>
-
-</launch>

@@ -1,0 +1,26 @@
+<launch>
+    <arg name="world_name" default="$(find pcb_table_world)/worlds/table.world" />
+    <rosparam file="$(find ur5_vacuum_robot)/config/ur5_control.yaml" command="load"/>
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="/ur5_sub" args="joint_state_controller shoulder_pan_position_controller shoulder_lift_position_controller elbow_position_controller wrist_1_position_controller wrist_2_position_controller wrist_3_position_controller"/>
+
+    <!-- Launch Gazebo -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(arg world_name)" />
+        <arg name="use_sim_time" value="true"/>
+        <arg name="gui" value="true"/>
+        <arg name="recording" value="false"/>
+        <arg name="debug" value="false"/>
+    </include>
+
+    <include file="$(find ur5_vacuum_robot)/launch/description.launch"/>
+    <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -model ur5 -param robot_description" respawn="false" />
+
+    <!-- <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d '$(find ur5_vacuum_robot)/rviz/ur5.rviz'" /> -->
+    <!-- <node name="move_to_camera" pkg="ur5_vacuum_robot" type="move_to_camera.py" output="screen" /> -->
+
+</launch>
