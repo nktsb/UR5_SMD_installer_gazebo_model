@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="world_name" default="$(find pcb_table_world)/worlds/ur5_table.world" />
+    
+    <include file="$(find ur5_vacuum_moveit)/launch/demo_gazebo.launch">
+      <arg name="world_name" value="$(arg world_name)" />
+    </include>
+    
+    <node name="component_1_spawner" pkg="gazebo_ros" type="spawn_model" args="-file $(find ur5_vacuum_demo)/urdf/component_0402.urdf -urdf -x 0.3 -y 0.35 -z 0.12 -model comp_1" />
+      <node name="component_2_spawner" pkg="gazebo_ros" type="spawn_model" args="-file $(find ur5_vacuum_demo)/urdf/component_0402.urdf -urdf -x 0.3 -y 0.2 -z 0.12 -model comp_2" />
+</launch>

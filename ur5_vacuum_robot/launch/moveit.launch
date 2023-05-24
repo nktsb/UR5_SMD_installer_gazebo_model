@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-    <arg name="world_name" default="$(find pcb_table_world)/worlds/ur5_table.world" />
-   
-    <include file="$(find ur5_vacuum_moveit)/launch/demo_gazebo.launch">
-      <arg name="world_name" value="$(arg world_name)" />
-    </include>
-
-</launch>
