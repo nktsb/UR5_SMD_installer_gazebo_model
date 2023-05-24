@@ -1,5 +1,6 @@
+<?xml version="1.0"?>
 <launch>
-    <arg name="world_name" default="$(find pcb_table_world)/worlds/table.world" />
+    <arg name="world_name" default="$(find pcb_table_world)/worlds/ur5_table.world" />
     <rosparam file="$(find ur5_vacuum_robot)/config/ur5_control.yaml" command="load"/>
 
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
