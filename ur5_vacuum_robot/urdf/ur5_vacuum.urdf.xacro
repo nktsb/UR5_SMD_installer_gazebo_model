@@ -17,7 +17,7 @@
   />
   
   <!-- vacuum gripper -->
-  <joint name="gripper_joint" type="revolute">
+  <joint name="gripper_joint" type="fixed">
     <axis xyz="0 0 1" />
     <parent link="ee_link" />
     <child link="vacuum_gripper" />
