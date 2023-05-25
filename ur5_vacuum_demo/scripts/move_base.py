@@ -47,6 +47,7 @@ def algorithm():
     move_arm(move_down(coord))
     gripper_off()
     move_arm(move_up(coord))
+    move_arm(goal_pose_calc(camera_stand))
 
 def gripper_status(msg):
     if msg.data:
