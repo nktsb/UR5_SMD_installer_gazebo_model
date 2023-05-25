@@ -107,6 +107,10 @@ def init():
   box_pose.pose.orientation.w = 1.0
   box_name = "table"
   scene.add_box(box_name, box_pose, size=(1.0, 1.0, 0.1))
+  box_name = "wall"
+  box_pose.pose.position.y = -0.5
+  
+  scene.add_box(box_name, box_pose, size=(1.0, 0.01, 1.0))
   global group_arm
   group_arm = moveit_commander.MoveGroupCommander("arm")
 
