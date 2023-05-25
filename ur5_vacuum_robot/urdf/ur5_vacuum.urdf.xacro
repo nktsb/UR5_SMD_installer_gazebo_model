@@ -18,16 +18,16 @@
   
   <!-- vacuum gripper -->
   <joint name="gripper_joint" type="revolute">
-    <axis xyz="0 0 1" />
-    <parent link="tool0" />
+    <axis xyz="1 0 0" />
+    <parent link="ee_link" />
     <child link="vacuum_gripper" />
-    <origin rpy="0 0 0" xyz="0 0 0.01" />
-    <limit effort="50" velocity="50" lower="0" upper="0" />
+    <origin rpy="0 0 0" xyz="0 0 0" />
+    <limit effort="50" velocity="50" lower="-1" upper="1" />
   </joint>
   <link name="vacuum_gripper">
     <gravity>0</gravity>
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 ${pi/2} 0" xyz="0 0 0"/>
       <geometry>
       <cylinder radius="0.005" length="0.01"/>
       </geometry>
