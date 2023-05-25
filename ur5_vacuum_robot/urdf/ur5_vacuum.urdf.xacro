@@ -21,12 +21,12 @@
     <axis xyz="0 0 1" />
     <parent link="ee_link" />
     <child link="vacuum_gripper" />
-    <origin rpy="0 ${pi/2} 0" xyz="0 0 0" />
+    <origin rpy="0 ${pi/2} 0" xyz="0.005 0 0" />
     <limit effort="50" velocity="50" lower="-1" upper="1" />
   </joint>
   <link name="vacuum_gripper">
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0.005"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <cylinder radius="0.004" length="0.02"/>
       </geometry>
@@ -35,13 +35,13 @@
       </material>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0.005"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <cylinder radius="0.004" length="0.02"/>
       </geometry>
     </collision>
     <xacro:cylinder_inertial radius="0.004" length="0.02" mass="0.01">
-      <origin xyz="0.0 0.0 0.005" rpy="0 0 0" />
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
     </xacro:cylinder_inertial>
   </link>
 
