@@ -37,7 +37,7 @@ def algorithm():
     gripper_on()
     move_arm(move_up(boxes[c]))
     move_arm(goal_pose_calc(camera_stand))
-    
+    rospy.sleep(1)
     coord = [float(a) for a in comp[1:]]
     coord.append(0.2)
 
