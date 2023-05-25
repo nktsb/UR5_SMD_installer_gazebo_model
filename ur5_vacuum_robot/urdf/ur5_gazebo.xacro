@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <xacro:macro name = "ur5_gazebo">
     <gazebo>
       <plugin name="gazebo_ros_vacuum_gripper" filename="libgazebo_ros_vacuum_gripper.so">
         <robotNamespace>/ur5_sub/vacuum_gripper</robotNamespace>
@@ -50,5 +49,5 @@
         </plugin>
       </sensor>
     </gazebo>
-  </xacro:macro>
+
 </robot>

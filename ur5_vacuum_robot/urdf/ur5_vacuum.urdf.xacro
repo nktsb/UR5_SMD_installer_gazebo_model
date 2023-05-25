@@ -1,12 +1,9 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro"
-       name="ur5" >
+       name="ur5_vacuum" >
        
   <xacro:include filename="$(find ur_description)/urdf/common.gazebo.xacro" />
   <xacro:include filename="$(find ur_description)/urdf/ur5.urdf.xacro" />
-  <xacro:include filename="$(find ur5_vacuum_robot)/urdf/ur5_gazebo.xacro" />
-  
-  <link name="world" />
  
   <!-- arm -->
   <xacro:ur5_robot prefix="" joint_limited="true"
@@ -18,14 +15,15 @@
     wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
     transmission_hw_interface = "hardware_interface/PositionJointInterface"
   />
-  <joint name="world_joint" type="fixed">
-    <parent link="world" />
-    <child link = "base_link" />
-    <origin xyz="0 -0.3 0.105" rpy="0.0 0.0 0.0" />
-  </joint>
   
   <!-- vacuum gripper -->
-  
+  <joint name="gripper_joint" type="revolute">
+    <axis xyz="0 0 1" />
+    <parent link="tool0" />
+    <child link="vacuum_gripper" />
+    <origin rpy="0 0 0" xyz="0 0 0.01" />
+    <limit effort="50" velocity="50" lower="0" upper="0" />
+  </joint>
   <link name="vacuum_gripper">
     <gravity>0</gravity>
     <visual>
@@ -33,8 +31,8 @@
       <geometry>
       <cylinder radius="0.005" length="0.01"/>
       </geometry>
-      <material name="transparent">
-        <color rgba="0 0 0 0"/>
+      <material name="red">
+        <color rgba="0.8 0.0 0.0 1.0"/>
       </material>
     </visual>
     <inertial>
@@ -43,23 +41,21 @@
       <inertia ixx="1e-08" ixy="0" ixz="0" iyy="1e-08" iyz="0" izz="1e-08"/>
     </inertial>
   </link>
-  <joint name="gripper_joint" type="fixed">
-    <axis xyz="1 0 0" />
-    <parent link="ee_link" />
-    <child link="vacuum_gripper" />
-    <origin rpy="0 1.5708 0" xyz="0.01 0 0" />
-<!--  <limit effort="50" velocity="50" lower="0" upper="0" />
-      <dynamics damping="0.0" friction="10"/> -->
-  </joint>
 
   <!-- camera -->
 
-  <link name="camera" />
   <joint name="camera_joint" type="fixed">
     <parent link="base_link" />
     <child link="camera" />
-    <origin xyz="0 0.7 0.01" rpy="0 ${radians(-90)} 0" />
+    <origin xyz="0 0.7 0.01" rpy="0 -1.5708 0" />
   </joint>
-  
-  <xacro:ur5_gazebo/>
+  <link name="camera" />
+
+  <xacro:include filename="$(find ur5_vacuum_robot)/urdf/ur5_gazebo.xacro" />
+  <link name="world" />
+  <joint name="world_joint" type="fixed">
+    <parent link="world" />
+    <child link = "base_link" />
+    <origin xyz="0 -0.3 0.105" rpy="0.0 0.0 0.0" />
+  </joint>
 </robot>
