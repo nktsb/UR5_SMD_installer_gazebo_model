@@ -61,7 +61,7 @@
   </link>
 
   <joint name="gripper_joint" type="revolute">
-    <axis xyz="0 0 0" />
+    <axis xyz="0 0 1" />
     <parent link="vacuum_gripper_base" />
     <child link="vacuum_gripper" />
     <origin rpy="0 0 0" xyz="0 0 0.0035" />
