@@ -17,33 +17,56 @@
   />
   
   <!-- vacuum gripper -->
-  <joint name="gripper_joint" type="revolute">
-    <axis xyz="0 0 1" />
-    <parent link="wrist_3_link" />
-    <child link="vacuum_gripper" />
-    <origin rpy="${pi/2} 0 0" xyz="0 0.085 0" />
-    <limit effort="50" velocity="50" lower="-1" upper="1" />
-  </joint>
-  <link name="vacuum_gripper">
+  <link name="vacuum_gripper_base">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <cylinder radius="0.004" length="0.02"/>
+        <cylinder radius="0.025" length="0.005"/>
       </geometry>
-      <material name="red">
-        <color rgba="0.8 0.0 0.0 1.0"/>
-      </material>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <cylinder radius="0.004" length="0.02"/>
+        <cylinder radius="0.025" length="0.005"/>
       </geometry>
     </collision>
-    <xacro:cylinder_inertial radius="0.004" length="0.02" mass="0.001">
+   <xacro:cylinder_inertial radius="0.025" length="0.005" mass="0.2">
       <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
     </xacro:cylinder_inertial>
   </link>
+  <joint name="gripper_base_joint" type="fixed">
+    <parent link="wrist_3_link" />
+    <child link="vacuum_gripper_base" />
+    <origin rpy="${-pi/2} 0 0" xyz="0 0.085 0" />
+  </joint>
+
+  <link name="vacuum_gripper">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.004" length="0.002"/>
+      </geometry>
+    </visual>
+    
+   <!-- <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.004" length="0.002"/>
+      </geometry>
+    </collision> -->
+    
+    <xacro:cylinder_inertial radius="0.004" length="0.002" mass="0.01">
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+    </xacro:cylinder_inertial>
+  </link>
+
+  <joint name="gripper_joint" type="revolute">
+    <axis xyz="0 0 0" />
+    <parent link="vacuum_gripper_base" />
+    <child link="vacuum_gripper" />
+    <origin rpy="0 0 0" xyz="0 0 0.0035" />
+    <limit effort="20" velocity="1.0" lower="0" upper="0" />
+  </joint>
 
   <!-- camera -->
 
