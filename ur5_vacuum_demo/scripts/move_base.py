@@ -10,6 +10,8 @@ from std_msgs.msg import Bool
 from std_srvs.srv import Empty
 from math import pi
 import tf_conversions
+import rectangle
+import gripper
 
 boxes = [[0.3, 0.35, 0.21, 'R'], [0.3, 0.2, 0.21, 'C']]	# boxes coordinates and components type
 camera_stand = [0, 0.3, 0.25] #
@@ -32,53 +34,37 @@ def algorithm():
       if comp[0][0] == boxes[c][3]:
         break
       c += 1
-    move_arm(move_up(boxes[c]))
-    move_arm(move_down(boxes[c]))
-    gripper_on()
-    move_arm(move_up(boxes[c]))
+
+    move_arm(up(boxes[c]))
+    move_arm(down(boxes[c]))
+    gripper.grasp_on()
+    move_arm(up(boxes[c]))
+
     move_arm(goal_pose_calc(camera_stand))
-    rospy.sleep(1)
+    rectangle.online_en = 1
+    rospy.sleep(2)
+    print(rectangle.rectangle)
+    rectangle.online_en = 0
+
     coord = [float(a) for a in comp[1:]]
     coord.append(0.2)
 
     coord[0] += pcb_origin[0]
     coord[1] += pcb_origin[1]
-    move_arm(move_up(coord))
-    move_arm(move_down(coord))
-    gripper_off()
-    move_arm(move_up(coord))
+
+    move_arm(up(coord))
+    move_arm(down(coord))
+
+    gripper.grasp_off()
+
+    move_arm(up(coord))
     move_arm(goal_pose_calc(camera_stand))
 
-def gripper_status(msg):
-    if msg.data:
-        return True
-        print('gripper status = {}'.format(msg.data))
-
-gripper_status_sub = rospy.Subscriber('/ur5_sub/vacuum_gripper/grasping', Bool, gripper_status, queue_size=1)
-
-def gripper_on():
-  rospy.wait_for_service('/ur5_sub/vacuum_gripper/off')
-  try:
-    turn_on = rospy.ServiceProxy('/ur5_sub/vacuum_gripper/on', Empty)
-    resp = turn_on()
-    return resp
-  except rospy.ServiceException:
-    print("Service call failed")
-
-def gripper_off():
-  rospy.wait_for_service('/ur5_sub/vacuum_gripper/off')
-  try:
-    turn_off = rospy.ServiceProxy('/ur5_sub/vacuum_gripper/off', Empty)
-    resp = turn_off()
-    return resp
-  except rospy.ServiceException:
-    print("Service call failed")
-
-def move_up(xyz):
+def up(xyz):
   xyz[2] += 0.015
   return goal_pose_calc(xyz)
 
-def move_down(xyz):
+def down(xyz):
   xyz[2] -= 0.015
   return goal_pose_calc(xyz)
 
@@ -97,7 +83,7 @@ def move_arm(goal_pose):
   group_arm.stop()
   group_arm.clear_pose_targets()
 
-def init():
+def alg_init():
   moveit_commander.roscpp_initialize(sys.argv)
   rospy.init_node("algorithm", anonymous=True)
   robot = moveit_commander.RobotCommander()
@@ -114,10 +100,10 @@ def init():
   scene.add_box(box_name, box_pose, size=(1.0, 0.01, 1.0))
   global group_arm
   group_arm = moveit_commander.MoveGroupCommander("arm")
-
+  rectangle.cam_init()
 
 if __name__ == '__main__':
-  init()
+  alg_init()
   load_coordinates()
   algorithm()
     
