@@ -52,7 +52,7 @@ def corner_calc(points):
         x1 = x3
         y1 = y3
     if x1 and y1 and x2 and y2:
-        return round(pi/2 + np.arctan((x2 - x1)/(y2 - y1)), 1)
+        return round(pi/2 + np.arctan((x2 - x1)/(y2 - y1)), 2)
     else:
         return 0xFE
 
