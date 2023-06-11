@@ -63,8 +63,8 @@ def algorithm():
       rectangle.new_val = 0
 
       if rectangle.rectangle != 0xFE: #there is component
-        angle = round(rectangle.rectangle, 2)
         actual_state = rotation.get_state(comp_name)
+        angle = round(actual_state.pose.orientation.z, 2)
         while True:
           if rectangle.new_val:
             rectangle.new_val = 0
