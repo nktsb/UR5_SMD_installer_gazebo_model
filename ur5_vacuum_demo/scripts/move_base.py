@@ -14,62 +14,92 @@ import rectangle
 import gripper
 import rotation
 
-boxes = [[0.3, 0.35, 0.21, 'R'], [0.3, 0.2, 0.21, 'C']]	# boxes coordinates and components type
+boxes = [[0.3, 0.35, 0.2, 'R'], [0.3, 0.2, 0.2, 'C']]	# boxes coordinates and components type
 camera_stand = [0, 0.3, 0.25] #
 pcb_origin = [-0.34, 0.175, 0.21]
 
 pcb_components = list()
+
 
 def load_coordinates():
   rospack = rospkg.RosPack()
   global pcb_components
   with open(rospack.get_path('ur5_vacuum_demo')+'/scripts/pcb_components.csv', newline='') as csvfile:
     spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+    c = 0
     for row in spamreader:
       pcb_components.append([a for a in row[0].split(',')])
+      pcb_components[c].append(0) #installing status
+      c += 1
+  print(pcb_components)
 
 def algorithm():
-  for comp in pcb_components:
-    c = 0
-    while True:
-      if comp[0][0] == boxes[c][3]:
-        break
-      c += 1
+  counter = 0
+  succes = 0 
+  while True:
+    if pcb_components[counter][4] == 0: #comonent still wasn't isntalled
+      box_num = 0
+      while True:
+        if pcb_components[counter][0][0] == boxes[box_num][3]: #find component type
+          break
+        box_num += 1
 
-    move_arm(up(boxes[c]))
-    move_arm(down(boxes[c]))
-    gripper.grasp_on()
-    move_arm(up(boxes[c]))
+      comp_name = 'comp_'+str(box_num+1)
+      comp_angle = pcb_components[counter][3]
 
-    move_arm(goal_pose_calc(camera_stand))
-    rectangle.online_en = 1
+      move_arm(up(boxes[box_num]))
+      move_arm(down(boxes[box_num]))
+      gripper.grasp_on()
+      move_arm(up(boxes[box_num]))
 
-    angle = 0
-    while True:
-      if(rectangle.new_val):
-        rectangle.new_val = 0
-        rotation.set_state('comp_2', rotation.get_state('comp_2'), angle)
-        angle += 0.01
-        if angle >= 1.5:
-          angle = 0
-      if rectangle.rectangle == 0.7:
-        break
+      move_arm(goal_pose_calc(camera_stand))
 
-    rectangle.online_en = 0
-    break
-    coord = [float(a) for a in comp[1:]]
-    coord.append(0.2)
+      rectangle.online_en = 1
+      
+      while True:
+        if rectangle.new_val or rectangle.rectangle:
+          break
 
-    coord[0] += pcb_origin[0]
-    coord[1] += pcb_origin[1]
+      rectangle.new_val = 0
 
-    move_arm(up(coord))
-    move_arm(down(coord))
+      if rectangle.rectangle != 0xFE: #there is component
+        angle = round(rectangle.rectangle, 2)
+        actual_state = rotation.get_state(comp_name)
+        while True:
+          if rectangle.new_val:
+            rectangle.new_val = 0
+            rotation.set_state(comp_name, actual_state, round(angle, 2))
+            angle += 0.05
+          if angle >= pi:
+            angle = 0
+          print(round(angle, 2), rectangle.rectangle)
+          if rectangle.rectangle == float(comp_angle):
+            break
 
-    gripper.grasp_off()
+        rectangle.online_en = 0
+        
+        comp_coord = [float(a) for a in pcb_components[counter][1:3]]
+        comp_coord.append(0.2) # Z axis for component drop
 
-    move_arm(up(coord))
-    move_arm(goal_pose_calc(camera_stand))
+        comp_coord[0] += pcb_origin[0]
+        comp_coord[1] += pcb_origin[1]
+
+        move_arm(up(comp_coord))
+        move_arm(down(comp_coord))
+        gripper.grasp_off()
+        move_arm(up(comp_coord))
+        pcb_components[counter][4] = 1 #install ok
+        succes += 1
+      else:
+        rectangle.online_en = 0
+    
+    counter += 1
+
+    if counter >= len(pcb_components):
+      counter = 0
+
+    if succes == len(pcb_components):
+      break
 
 def up(xyz):
   xyz[2] += 0.015
@@ -94,10 +124,7 @@ def move_arm(goal_pose):
   group_arm.stop()
   group_arm.clear_pose_targets()
 
-def alg_init():
-  moveit_commander.roscpp_initialize(sys.argv)
-  rospy.init_node("algorithm", anonymous=True)
-  robot = moveit_commander.RobotCommander()
+def add_walls():
   scene = moveit_commander.PlanningSceneInterface()
   box_pose = geometry_msgs.msg.PoseStamped()
   box_pose.header.frame_id = "world"
@@ -107,14 +134,21 @@ def alg_init():
   scene.add_box(box_name, box_pose, size=(1.0, 1.0, 0.1))
   box_name = "wall"
   box_pose.pose.position.y = -0.5
-  
   scene.add_box(box_name, box_pose, size=(1.0, 0.01, 1.0))
+
+def alg_init():
+  rospy.init_node("algorithm", anonymous=True)
+  add_walls()
   global group_arm
+  moveit_commander.roscpp_initialize(sys.argv)
   group_arm = moveit_commander.MoveGroupCommander("arm")
   rectangle.cam_init()
 
 if __name__ == '__main__':
-  alg_init()
-  load_coordinates()
-  algorithm()
-    
+  try:
+    alg_init()
+    load_coordinates()
+    algorithm()
+    move_arm(goal_pose_calc(camera_stand))
+  except KeyboardInterrupt:
+    quit()
