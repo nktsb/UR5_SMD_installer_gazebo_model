@@ -20,15 +20,16 @@ def callback(data):
         global rectangle
         global new_val
         orig_image = bridge.imgmsg_to_cv2(data, desired_encoding="bgr8")
-        
-        #cv2.imshow("Orig", orig_image)
-        
+        # cv2.imshow("Orig", orig_image)
         image = orig_image[40:440, 40:440] #crop
+        # cv2.imshow("Crop", image)
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #grayscale
+        # cv2.imshow("Gray", gray)
         blur = cv2.GaussianBlur(gray, (15,15), 0)
+        # cv2.imshow("Blur", blur)
         thresh = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 101, 3)
         
-        #cv2.imshow("Processed", thresh)
+        # cv2.imshow("Processed", thresh)
         
         contours, hier = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         try:
@@ -44,7 +45,7 @@ def callback(data):
             rectangle = 0xFE
             print("No components here")
 
-        cv2.imshow("Final", image)
+        cv2.imshow("Final image", image)
         cv2.waitKey(100)
     else:
         cv2.destroyAllWindows()
