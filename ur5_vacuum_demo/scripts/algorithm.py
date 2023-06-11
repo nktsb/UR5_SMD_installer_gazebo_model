@@ -68,7 +68,7 @@ def algorithm():
           if angle >= pi:
             angle = 0
           print(round(angle, 2), rectangle.rectangle)
-          if rectangle.rectangle == float(round(comp_angle, 1)):
+          if rectangle.rectangle == round(float(comp_angle), 1):
             break
 
         rectangle.online_en = 0
