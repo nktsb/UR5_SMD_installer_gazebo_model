@@ -12,6 +12,7 @@ from math import pi
 import tf_conversions
 import rectangle
 import gripper
+import rotation
 
 boxes = [[0.3, 0.35, 0.21, 'R'], [0.3, 0.2, 0.21, 'C']]	# boxes coordinates and components type
 camera_stand = [0, 0.3, 0.25] #
@@ -42,10 +43,20 @@ def algorithm():
 
     move_arm(goal_pose_calc(camera_stand))
     rectangle.online_en = 1
-    rospy.sleep(2)
-    print(rectangle.rectangle)
-    rectangle.online_en = 0
 
+    angle = 0
+    while True:
+      if(rectangle.new_val):
+        rectangle.new_val = 0
+        rotation.set_state('comp_2', rotation.get_state('comp_2'), angle)
+        angle += 0.01
+        if angle >= 1.5:
+          angle = 0
+      if rectangle.rectangle == 0.7:
+        break
+
+    rectangle.online_en = 0
+    break
     coord = [float(a) for a in comp[1:]]
     coord.append(0.2)
 

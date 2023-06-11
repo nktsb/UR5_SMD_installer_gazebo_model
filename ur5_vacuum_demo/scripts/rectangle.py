@@ -10,6 +10,7 @@ from cv_bridge import CvBridge, CvBridgeError
 bridge = CvBridge()
 online_en = 0
 rectangle = 0
+new_val = 0
 
 def cam_init():
     image_sub = rospy.Subscriber("/camera/image_raw", Image, callback)
@@ -17,6 +18,7 @@ def cam_init():
 def callback(data):
     if online_en == 1:
         global rectangle
+        global new_val
         orig_image = bridge.imgmsg_to_cv2(data, desired_encoding="bgr8")
         image = orig_image[165:315, 165:315] #crop
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #grayscale
@@ -29,6 +31,7 @@ def callback(data):
         box = np.int0(box)
         if len(box) == 4:
             rectangle = corner_calc(box)
+            new_val = 1
             cv2.putText(image, str(rectangle), (box[1][0] + 5, box[1][1] + 5), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 210, 150), 3, cv2.LINE_AA)
             cv2.drawContours(image, [box], 0, (255, 210, 150), 3)
 
@@ -44,4 +47,4 @@ def corner_calc(points):
     if(sqrt((x3 - x2)**2 + (y3 - y2)**2) > sqrt((x1 - x2)**2 + (y1 - y2)**2)):
         x1 = x3
         y1 = y3
-    return round(np.arctan((x1 - x2)/(y1 - y2)), 3)
+    return round(np.arctan((x1 - x2)/(y1 - y2)), 1)
