@@ -33,7 +33,7 @@ def callback(data):
             if len(box) == 4:
                 rectangle = corner_calc(box)
                 new_val = 1
-                cv2.putText(image, str(rectangle), (box[1][0] + 5, box[1][1] + 5), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 210, 150), 3, cv2.LINE_AA)
+                cv2.putText(image, str(round(rectangle, 3)), (box[1][0] + 5, box[1][1] + 5), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 210, 150), 3, cv2.LINE_AA)
                 cv2.drawContours(image, [box], 0, (255, 210, 150), 3)
         except:
             rectangle = 0xFE
@@ -52,7 +52,7 @@ def corner_calc(points):
         x1 = x3
         y1 = y3
     if x1 and y1 and x2 and y2:
-        return round(pi/2 + np.arctan((x2 - x1)/(y2 - y1)), 2)
+        return round(pi/2 + np.arctan((x2 - x1)/(y2 - y1)), 5)
     else:
         return 0xFE
 

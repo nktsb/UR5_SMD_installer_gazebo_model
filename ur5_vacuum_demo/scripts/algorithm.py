@@ -11,6 +11,8 @@ import rectangle
 import rotation
 import gripper
 
+accuracy = 3
+
 boxes = [[0.3, 0.35, 0.2, 'R'], [0.3, 0.2, 0.2, 'C']] # boxes coordinates and components type
 camera_stand = [0, 0.3, 0.25] #
 pcb_origin = [-0.34, 0.175, 0.21]
@@ -42,7 +44,7 @@ def algorithm():
 
       comp_name = 'comp_' + str(box_num + 1) #name of model in gazebo
       comp_angle = pcb_components[counter][3] #goal angle
-      comp_angle = round(float(comp_angle), 2)
+      comp_angle = round(float(comp_angle), accuracy)
 
       moving.move_arm(moving.up(boxes[box_num])) #go to box
       moving.move_arm(moving.down(boxes[box_num])) #move gripper down
@@ -59,24 +61,29 @@ def algorithm():
 
       rectangle.new_val = 0
 
+      actual_state = rotation.get_state(comp_name)
+      roll, pitch, yaw = euler_from_quaternion([actual_state.pose.orientation.x, actual_state.pose.orientation.y, actual_state.pose.orientation.z, actual_state.pose.orientation.w])
+      
+      angle = yaw
+
       if rectangle.rectangle != 0xFE: #there is component
-
-        actual_state = rotation.get_state(comp_name)
-        roll, pitch, yaw = euler_from_quaternion([actual_state.pose.orientation.x, actual_state.pose.orientation.y, actual_state.pose.orientation.z, actual_state.pose.orientation.w])
-
-        angle = yaw #current angle, start from it
 
         while True:
           if rectangle.new_val:
-            #rospy.sleep(0.5)
             rectangle.new_val = 0
+
+            actual_state = rotation.get_state(comp_name)
+            roll, pitch, yaw = euler_from_quaternion([actual_state.pose.orientation.x, actual_state.pose.orientation.y, actual_state.pose.orientation.z, actual_state.pose.orientation.w])
+            
+            angle += (comp_angle - yaw)*0.1
+            #rospy.sleep(0.5)
+          
             rotation.set_state(comp_name, actual_state, roll, pitch, angle) #rotate component
-            angle += 0.01
-            if round(rectangle.rectangle, 2) == round(comp_angle, 2):
+            if round(rectangle.rectangle, accuracy) == comp_angle:
               break
-          if angle >= round(pi*2, 2):
-            angle = 0
-          print(comp_angle, round(rectangle.rectangle, 2), round(angle, 2), end = '\r')
+          # if angle >= round(pi*2, 3):
+          #   angle = 0
+          print(comp_angle, round(rectangle.rectangle, accuracy), round(angle, accuracy), end = '\r')
           
 
         rectangle.online_en = 0
