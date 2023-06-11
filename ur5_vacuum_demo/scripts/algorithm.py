@@ -106,6 +106,7 @@ def algorithm():
     if counter >= len(pcb_components): # try again if some component wasn't succesfully installed
       counter = 0
     if succes == len(pcb_components): # all components installed - finish algorithm
+      moving.move_arm(moving.goal_pose_calc(camera_stand))
       break
 
 def alg_init():
@@ -119,6 +120,5 @@ if __name__ == '__main__':
     alg_init()
     load_coordinates()
     algorithm()
-    moving.move_arm(moving.goal_pose_calc(camera_stand))
   except KeyboardInterrupt:
     quit()
