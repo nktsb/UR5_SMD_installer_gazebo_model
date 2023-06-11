@@ -44,7 +44,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <cylinder radius="0.004" length="0.002"/>
+        <cylinder radius="0.002" length="0.002"/>
       </geometry>
     </visual>
     
@@ -55,7 +55,7 @@
       </geometry>
     </collision> -->
     
-    <xacro:cylinder_inertial radius="0.004" length="0.002" mass="0.01">
+    <xacro:cylinder_inertial radius="0.002" length="0.002" mass="0.01">
       <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
     </xacro:cylinder_inertial>
   </link>

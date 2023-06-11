@@ -6,7 +6,7 @@
         <robotNamespace>/ur5_sub/vacuum_gripper</robotNamespace>
         <bodyName>vacuum_gripper</bodyName>
         <topicName>grasping</topicName>
-        <maxForce>1</maxForce>
+        <maxForce>0.001</maxForce>
         <maxDistance>0.05</maxDistance>
         <minDistance>0.01</minDistance>
       </plugin>

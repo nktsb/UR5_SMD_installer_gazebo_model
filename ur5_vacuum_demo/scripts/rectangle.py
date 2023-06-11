@@ -20,11 +20,16 @@ def callback(data):
         global rectangle
         global new_val
         orig_image = bridge.imgmsg_to_cv2(data, desired_encoding="bgr8")
-        image = orig_image[165:315, 165:315] #crop
+        
+        #cv2.imshow("Orig", orig_image)
+        
+        image = orig_image[40:440, 40:440] #crop
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #grayscale
-        blur = cv2.GaussianBlur(gray, (9,9), 0)
-        thresh = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 51, 2)
-
+        blur = cv2.GaussianBlur(gray, (15,15), 0)
+        thresh = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 101, 3)
+        
+        #cv2.imshow("Processed", thresh)
+        
         contours, hier = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         try:
             rect = cv2.minAreaRect(contours[0])
@@ -39,7 +44,7 @@ def callback(data):
             rectangle = 0xFE
             print("No components here")
 
-        cv2.imshow("Camera output", image)
+        cv2.imshow("Final", image)
         cv2.waitKey(100)
     else:
         cv2.destroyAllWindows()

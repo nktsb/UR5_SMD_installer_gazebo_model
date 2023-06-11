@@ -14,7 +14,7 @@ import gripper
 accuracy = 3
 
 boxes = [[0.3, 0.35, 0.2, 'R'], [0.3, 0.2, 0.2, 'C']] # boxes coordinates and components type
-camera_stand = [0, 0.3, 0.25] #
+camera_stand = [0, 0.3, 0.22] #
 pcb_origin = [-0.34, 0.175, 0.21]
 
 pcb_components = list()
