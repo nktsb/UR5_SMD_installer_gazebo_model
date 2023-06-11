@@ -71,7 +71,7 @@ def algorithm():
             #rospy.sleep(0.5)
             rectangle.new_val = 0
             rotation.set_state(comp_name, actual_state, roll, pitch, angle) #rotate component
-            angle += 0.005
+            angle += 0.01
             if round(rectangle.rectangle, 2) == round(comp_angle, 2):
               break
           if angle >= round(pi*2, 2):
