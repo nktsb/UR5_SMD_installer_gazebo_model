@@ -64,7 +64,7 @@ def algorithm():
           if rectangle.new_val:
             rectangle.new_val = 0
             rotation.set_state(comp_name, actual_state, round(angle, 2)) #rotate component
-            angle += 0.01 
+            angle += 0.05
           if angle >= pi:
             angle = 0
           print(round(angle, 2), rectangle.rectangle)
