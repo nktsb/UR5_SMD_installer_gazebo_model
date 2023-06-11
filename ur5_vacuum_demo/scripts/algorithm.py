@@ -4,7 +4,8 @@ import rospy
 import rospkg
 from math import pi
 import csv
-
+import numpy as np
+from tf.transformations import euler_from_quaternion
 import moving
 import rectangle
 import rotation
@@ -41,6 +42,7 @@ def algorithm():
 
       comp_name = 'comp_' + str(box_num + 1) #name of model in gazebo
       comp_angle = pcb_components[counter][3] #goal angle
+      comp_angle = round(float(comp_angle), 2)
 
       moving.move_arm(moving.up(boxes[box_num])) #go to box
       moving.move_arm(moving.down(boxes[box_num])) #move gripper down
@@ -58,21 +60,26 @@ def algorithm():
       rectangle.new_val = 0
 
       if rectangle.rectangle != 0xFE: #there is component
+
         actual_state = rotation.get_state(comp_name)
-        angle = round(actual_state.pose.orientation.z, 2) #current angle, start from it
+        roll, pitch, yaw = euler_from_quaternion([actual_state.pose.orientation.x, actual_state.pose.orientation.y, actual_state.pose.orientation.z, actual_state.pose.orientation.w])
+
+        angle = yaw #current angle, start from it
+
         while True:
           if rectangle.new_val:
+            #rospy.sleep(0.5)
             rectangle.new_val = 0
-            rotation.set_state(comp_name, actual_state, round(angle, 2)) #rotate component
-            angle += 0.05
-          if angle >= pi:
+            rotation.set_state(comp_name, actual_state, roll, pitch, angle) #rotate component
+            angle += 0.005
+            if round(rectangle.rectangle, 2) == round(comp_angle, 2):
+              break
+          if angle >= round(pi*2, 2):
             angle = 0
-          print(round(angle, 2), rectangle.rectangle)
-          if rectangle.rectangle == round(float(comp_angle), 1):
-            break
+          print(comp_angle, round(rectangle.rectangle, 2), round(angle, 2), end = '\r')
+          
 
         rectangle.online_en = 0
-        
         comp_coord = [float(a) for a in pcb_components[counter][1:3]]
         comp_coord.append(0.2) # Z axis for component drop
 
