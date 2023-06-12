@@ -64,7 +64,6 @@ def algorithm():
       moving.move_arm(moving.up(boxes[box_num])) #move gripper up
 
       moving.move_arm(moving.goal_pose_calc(camera_stand)) #go to camera
-
       rectangle.online_en = 1 #enable openCV angle determining
       
       while True:
@@ -91,7 +90,7 @@ def algorithm():
             #rospy.sleep(0.5)
           
             rotation.set_state(comp_name, actual_state, roll, pitch, angle) #rotate component
-            if round(rectangle.rectangle, accuracy) == comp_angle:
+            if round(rectangle.rectangle, accuracy) == comp_angle or round(rectangle.rectangle, accuracy) == (comp_angle + round(pi, accuracy)):
               break
           # if angle >= round(pi*2, 3):
           #   angle = 0
