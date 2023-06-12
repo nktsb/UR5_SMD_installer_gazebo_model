@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
+import os
 import sys
 import rospy
 import rospkg
 from math import pi
+import random
 import csv
 import numpy as np
 from tf.transformations import euler_from_quaternion
@@ -10,6 +12,7 @@ import moving
 import rectangle
 import rotation
 import gripper
+import roslaunch
 
 accuracy = 3
 
@@ -42,7 +45,16 @@ def algorithm():
           break
         box_num += 1
 
-      comp_name = 'comp_' + str(box_num + 1) #name of model in gazebo
+      yaw_1 = round(random.uniform(0, pi), 3)
+      yaw_2 = round(random.uniform(0, pi), 3)
+      comp_name_1 = counter + 2
+      comp_name_2 = counter + 1
+      # print(str(yaw_1), str(yaw_2))
+      
+      if not counter % 2:
+        os.system('roslaunch ur5_vacuum_demo components.launch comp_1_name:="comp_' + str(comp_name_1) + '" comp_2_name:="comp_' + str(comp_name_2) + '" yaw_2:="' + str(yaw_2) + '" yaw_1:="' + str(yaw_1) + '"')
+
+      comp_name = 'comp_' + str(counter + 1) #name of model in gazebo
       comp_angle = pcb_components[counter][3] #goal angle
       comp_angle = round(float(comp_angle), accuracy)
 
@@ -75,7 +87,7 @@ def algorithm():
             actual_state = rotation.get_state(comp_name)
             roll, pitch, yaw = euler_from_quaternion([actual_state.pose.orientation.x, actual_state.pose.orientation.y, actual_state.pose.orientation.z, actual_state.pose.orientation.w])
             
-            angle += (comp_angle - yaw)*0.1
+            angle += (comp_angle - yaw)*0.2
             #rospy.sleep(0.5)
           
             rotation.set_state(comp_name, actual_state, roll, pitch, angle) #rotate component

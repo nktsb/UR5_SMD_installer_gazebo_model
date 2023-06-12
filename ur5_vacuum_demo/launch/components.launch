@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="comp_1_name" default="comp_1" />
+    <arg name="comp_2_name" default="comp_2" />
+    <arg name="yaw_1"	default="1.571" />
+    <arg name="yaw_2"	default="1.571" />
+    
+    <node name="$(arg comp_1_name)" pkg="gazebo_ros" type="spawn_model" args="-file $(find ur5_vacuum_demo)/urdf/component_0402.urdf -urdf -x 0.3 -y 0.35 -z 0.12 -Y $(arg yaw_1) -model $(arg comp_1_name)" />
+     <node name="$(arg comp_2_name)" pkg="gazebo_ros" type="spawn_model" args="-file $(find ur5_vacuum_demo)/urdf/component_0402.urdf -urdf -x 0.3 -y 0.2 -z 0.12 -Y $(arg yaw_2) -model $(arg comp_2_name)" />
+</launch>
