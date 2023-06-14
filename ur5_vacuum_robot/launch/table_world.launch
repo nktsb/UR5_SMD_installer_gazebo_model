@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="world_name" default="$(find pcb_table_world)/worlds/ur5_table.world" />
+    <rosparam file="$(find ur5_vacuum_robot)/config/ur5_control.yaml" command="load"/>
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+
+    <!-- Launch Gazebo -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(arg world_name)" />
+    </include>
+
+    <include file="$(find ur5_vacuum_robot)/launch/description.launch"/>
+    <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -model ur5_vacuum -param robot_description" respawn="false" />
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
+    args="joint_state_controller
+          shoulder_pan_joint_position
+          shoulder_lift_joint_position
+          elbow_joint_position
+          wrist_1_joint_position
+          wrist_2_joint_position
+          wrist_3_joint_position" />
+
+    <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d '$(find ur5_vacuum_robot)/rviz/ur5.rviz'" />
+
+</launch>

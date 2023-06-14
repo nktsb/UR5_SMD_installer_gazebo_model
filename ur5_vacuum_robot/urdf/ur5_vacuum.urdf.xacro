@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro"
+       name="ur5" >
+       
+  <xacro:include filename="$(find ur_description)/urdf/common.gazebo.xacro" />
+  <xacro:include filename="$(find ur_description)/urdf/ur5.urdf.xacro" />
+ 
+  <!-- arm -->
+  <xacro:ur5_robot prefix="" joint_limited="true"
+    shoulder_pan_lower_limit="${-2*pi}" shoulder_pan_upper_limit="${2*pi}"
+    shoulder_lift_lower_limit="${-pi}" shoulder_lift_upper_limit="${pi}"
+    elbow_joint_lower_limit="${-pi}" elbow_joint_upper_limit="${pi}"
+    wrist_1_lower_limit="${-pi}" wrist_1_upper_limit="${pi}"
+    wrist_2_lower_limit="${-pi}" wrist_2_upper_limit="${pi}"
+    wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
+    transmission_hw_interface = "hardware_interface/PositionJointInterface"
+  />
+  
+  <!-- vacuum gripper -->
+  <link name="vacuum_gripper_base">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.025" length="0.005"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.025" length="0.005"/>
+      </geometry>
+    </collision>
+   <xacro:cylinder_inertial radius="0.025" length="0.005" mass="0.2">
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+    </xacro:cylinder_inertial>
+  </link>
+  <joint name="gripper_base_joint" type="fixed">
+    <parent link="wrist_3_link" />
+    <child link="vacuum_gripper_base" />
+    <origin rpy="${-pi/2} 0 0" xyz="0 0.085 0" />
+  </joint>
+
+  <link name="vacuum_gripper">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.002" length="0.002"/>
+      </geometry>
+    </visual>
+    
+   <!-- <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.004" length="0.002"/>
+      </geometry>
+    </collision> -->
+    
+    <xacro:cylinder_inertial radius="0.002" length="0.002" mass="0.01">
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+    </xacro:cylinder_inertial>
+  </link>
+
+  <joint name="gripper_joint" type="revolute">
+    <axis xyz="0 0 1" />
+    <parent link="vacuum_gripper_base" />
+    <child link="vacuum_gripper" />
+    <origin rpy="0 0 0" xyz="0 0 0.0035" />
+    <limit effort="20" velocity="1.0" lower="0" upper="0" />
+  </joint>
+
+  <!-- camera -->
+
+  <joint name="camera_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="camera" />
+    <origin xyz="0 0.6 0.01" rpy="0 ${-pi/2} ${-pi/2}" />
+  </joint>
+  <link name="camera" />
+
+  <xacro:include filename="$(find ur5_vacuum_robot)/urdf/ur5_gazebo.xacro" />
+  <link name="world" />
+  <joint name="world_joint" type="fixed">
+    <parent link="world" />
+    <child link = "base_link" />
+    <origin xyz="0 -0.3 0.105" rpy="0.0 0.0 0.0" />
+  </joint>
+</robot>

@@ -1,0 +1,9 @@
+<launch>
+    <arg name="world_name" default="$(find pcb_table_world)/worlds/ur5_table.world" />
+
+    <!-- Launch Gazebo -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(arg world_name)" />
+    </include>
+
+</launch>
