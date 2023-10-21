@@ -72,8 +72,7 @@ def algorithm():
 
       rectangle.new_val = 0
 
-      actual_state = rotation.get_state(comp_name)
-      roll, pitch, yaw = euler_from_quaternion([actual_state.pose.orientation.x, actual_state.pose.orientation.y, actual_state.pose.orientation.z, actual_state.pose.orientation.w])
+      actual_state,roll, pitch, yaw = rotation.get_angle(comp_name)
       
       angle = yaw
 
@@ -83,13 +82,12 @@ def algorithm():
           if rectangle.new_val:
             rectangle.new_val = 0
 
-            actual_state = rotation.get_state(comp_name)
-            roll, pitch, yaw = euler_from_quaternion([actual_state.pose.orientation.x, actual_state.pose.orientation.y, actual_state.pose.orientation.z, actual_state.pose.orientation.w])
+            actual_state, roll, pitch, yaw = rotation.get_angle(comp_name)
             
             angle += (comp_angle - yaw)*0.2
             #rospy.sleep(0.5)
           
-            rotation.set_state(comp_name, actual_state, roll, pitch, angle) #rotate component
+            rotation.set_angle(comp_name, actual_state, roll, pitch, angle) #rotate component
             if round(rectangle.rectangle, accuracy) == comp_angle or round(rectangle.rectangle, accuracy) == (comp_angle + round(pi, accuracy)):
               break
           # if angle >= round(pi*2, 3):
