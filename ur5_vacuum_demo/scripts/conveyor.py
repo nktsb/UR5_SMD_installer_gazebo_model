@@ -23,6 +23,10 @@ def put_object_on_conveyor(object):
   global conveyor_objects
   conveyor_objects.append(object)
 
+def remove_from_conveyor(object):
+  global conveyor_objects
+  conveyor_objects.remove(object)
+
 def set_mstate(obj_name, state):
   goal_state = ModelState()
   goal_state.model_name = obj_name
@@ -60,7 +64,7 @@ def conveyor_task():
   while True:
     if start_stop_flag == 1:
 
-      if task_counter == 0
+      if task_counter == 0:
         if pcb_counter < 3:
           pcb_counter += 1
           new_pcb = 'pcb_' + str(pcb_counter)
@@ -68,15 +72,18 @@ def conveyor_task():
           put_object_on_conveyor(new_pcb)
 
       task_counter += 1
-      if task_counter == 1000:
+      if task_counter == 800:
         task_counter = 0
 
       for obj in conveyor_objects:
         actual_state = get_mstate(obj)
-        actual_state.pose.position.y -= 0.00025
-        set_mstate(obj, actual_state)
+        actual_state.pose.position.y -= 0.002
+        if actual_state.pose.position.y > -0.95:
+          set_mstate(obj, actual_state)
+        else:
+          remove_from_conveyor(obj)
 
-      time.sleep(0.0025/len(conveyor_objects))
+      time.sleep(0.02/len(conveyor_objects))
 
 def conveyor_init():
   global start_stop_flag
