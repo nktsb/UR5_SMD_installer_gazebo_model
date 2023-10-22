@@ -11,20 +11,20 @@ from math import pi
 import tf_conversions
 
 def up(xyz):
-  xyz[2] += 0.015
+  xyz['z'] += 0.015
   return goal_pose_calc(xyz)
 
 def down(xyz):
-  xyz[2] -= 0.015
+  xyz['z'] -= 0.015
   return goal_pose_calc(xyz)
 
-def goal_pose_calc(xyz = [0, 0, 0.25]):
+def goal_pose_calc(xyz = {'x': 0, 'y': 0, 'z': 0.25}):
   pose_goal = geometry_msgs.msg.Pose()
   pose_goal_quaternion = tf_conversions.transformations.quaternion_from_euler(-pi/2, 0, 0)
   pose_goal.orientation.x, pose_goal.orientation.y, pose_goal.orientation.z, pose_goal.orientation.w = pose_goal_quaternion
-  pose_goal.position.x = xyz[0]
-  pose_goal.position.y = xyz[1]
-  pose_goal.position.z = xyz[2]
+  pose_goal.position.x = xyz['x']
+  pose_goal.position.y = xyz['y']
+  pose_goal.position.z = xyz['z']
   return pose_goal
 
 def move_arm(goal_pose):

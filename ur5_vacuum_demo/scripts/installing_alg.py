@@ -13,6 +13,8 @@ import rectangle
 import rotation
 import gripper
 import roslaunch
+import threading
+import conveyor as cn
 
 accuracy = 3
 
@@ -63,7 +65,7 @@ def load_coordinates():
         'status': 0 #installing status
       }
       cnt += 1
-  print(pcb_components)
+  # print(pcb_components)
 
 def spawn_components(comp_name_1, comp_name_2):
   yaw_1 = round(random.uniform(0, pi), 3)
@@ -92,13 +94,15 @@ def algorithm():
       comp_angle = pcb_components[counter]['angle'] #goal angle
       comp_angle = round(float(comp_angle), accuracy)
 
+      # print("Components spawned")
       moving.move_arm(moving.up(boxes[box_num])) #go to box
       moving.move_arm(moving.down(boxes[box_num])) #move gripper down
       gripper.grasp_on() #turn on gripper
       moving.move_arm(moving.up(boxes[box_num])) #move gripper up
 
       moving.move_arm(moving.goal_pose_calc(camera_stand)) #go to camera
-      rectangle.online_en = 1 #enable openCV angle determining
+  
+      rectangle.processing_en() #enable openCV angle determining
       
       while True:
         if rectangle.new_val or rectangle.rectangle: #new value or error code
@@ -129,7 +133,8 @@ def algorithm():
           print(comp_angle, round(rectangle.rectangle, accuracy), round(angle, accuracy), end = '\r')
           
 
-        rectangle.online_en = 0
+        rectangle.processing_dis()
+
         comp_coord = {
           'x': float(pcb_components[counter]['x']),
           'y': float(pcb_components[counter]['y']),
@@ -153,18 +158,28 @@ def algorithm():
       counter = 0
     if succes == len(pcb_components): # all components installed - finish algorithm
       moving.move_arm(moving.goal_pose_calc(camera_stand))
-      break
+      quit()
 
 def alg_init():
   load_coordinates()
   rospy.init_node("algorithm", anonymous=True)
-  moving.add_walls() # add walls to scene
-  moving.init() # init moveit
-  rectangle.cam_init() # init camera and openCV
+  moving.add_walls() # add walls to scen
 
 if __name__ == '__main__':
   try:
+    rectangle.cam_init() # init camera and openCV
+    moving.init() #init moveit
+    
+    cn.conveyor_init()
+    cn.conveyor_start()
+
     alg_init()
-    algorithm()
+
+    algorithm_task = threading.Thread(target = algorithm)
+    conveyor_task = threading.Thread(target = cn.conveyor_task)
+    
+    conveyor_task.start()
+    algorithm_task.start()
+    
   except KeyboardInterrupt:
     quit()

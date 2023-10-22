@@ -12,6 +12,14 @@ online_en = 0
 rectangle = 0
 new_val = 0
 
+def processing_en():
+    global online_en
+    online_en = 1
+
+def processing_dis():
+    global online_en
+    online_en = 0
+
 def cam_init():
     image_sub = rospy.Subscriber("/camera/image_raw", Image, callback)
 
