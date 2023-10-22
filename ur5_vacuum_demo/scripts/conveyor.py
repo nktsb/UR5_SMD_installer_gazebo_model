@@ -42,8 +42,7 @@ def conveyor_task():
   while start_stop_flag == 1:
     actual_state.pose.position.y -= 0.00025
     set_mstate(actual_state)
-    print("YO")
-    time.sleep(0.001)
+    time.sleep(0.0025)
 
 def conveyor_init():
   global start_stop_flag
