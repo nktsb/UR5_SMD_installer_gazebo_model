@@ -3,8 +3,4 @@
     
     <node name="conveyor" pkg="gazebo_ros" type="spawn_model" args="-file $(find ur5_vacuum_conveyor)/urdf/ur5_vacuum_conveyor.urdf.xacro -urdf -x -0.3 -y 2 -z 0 -model conveyor" />
 
-    <rosparam file="$(find ur5_vacuum_conveyor)/config/ur5_conveyor.yaml" command="load"/>
-
-    <node name="conveyor_ctl_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" 
-        ns="/conveyor" args="joint_state_controller effort_controller" />
 </launch>

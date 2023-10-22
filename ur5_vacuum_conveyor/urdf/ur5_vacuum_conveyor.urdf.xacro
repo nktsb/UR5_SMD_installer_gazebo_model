@@ -40,15 +40,4 @@ name="ur5_vacuum_conveyor">
   <axis xyz="0 1 0"/>
   <limit upper = "0" lower="-4" effort="1" velocity="1"/>
 </joint>
-
-<transmission name="conveyor_joint_trans">
-  <type>transmission_interface/SimpleTransmission</type>
-  <joint name="conveyor_joint">
-    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-  </joint>
-  <actuator name="conveyor_motor">
-    <mechanicalReduction>1</mechanicalReduction>
-  </actuator>
-</transmission>
-
 </robot>

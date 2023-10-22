@@ -148,7 +148,11 @@ def algorithm():
         moving.move_arm(moving.down(comp_coord))
         gripper.grasp_off()
         moving.move_arm(moving.up(comp_coord))
+
         pcb_components[counter]['status'] = 1 #install current component ok
+
+        cn.put_object_on_conveyor(comp_name)
+
         succes += 1
       else:
         rectangle.online_en = 0

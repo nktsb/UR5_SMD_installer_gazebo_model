@@ -13,11 +13,16 @@ from gazebo_msgs.srv import GetModelState
 
 start_stop_flag = 0
 start_state = ModelState()
-conveyor_length = 0
 
-def set_mstate(state):
+conveyor_objects=[]
+
+def put_object_on_conveyor(object):
+  global conveyor_objects
+  conveyor_objects.append(object)
+
+def set_mstate(obj_name, state):
   goal_state = ModelState()
-  goal_state.model_name = "conveyor"
+  goal_state.model_name = obj_name
   goal_state.pose.position = state.pose.position
   goal_state.pose.orientation = state.pose.orientation
 
@@ -28,30 +33,26 @@ def set_mstate(state):
   except rospy.ServiceException:
     print("Service failed")
 
-def get_mstate():
+def get_mstate(obj_name):
   rospy.wait_for_service('/gazebo/get_model_state')
   try:
     get_state = rospy.ServiceProxy('/gazebo/get_model_state', GetModelState)
-    state = get_state('conveyor', 'world')
+    state = get_state(obj_name, 'world')
     return state
   except rospy.ServiceException:
     print("Service failed")
 
 def conveyor_task():
-  actual_state = get_mstate()
   while start_stop_flag == 1:
-    actual_state.pose.position.y -= 0.00025
-    set_mstate(actual_state)
-    time.sleep(0.0025)
+    for obj in conveyor_objects:
+      actual_state = get_mstate(obj)
+      actual_state.pose.position.y -= 0.00025
+      set_mstate(obj, actual_state)
+      time.sleep(0.0025)
 
 def conveyor_init():
   global start_stop_flag
-  global conveyor_length
-  start_state = get_mstate()
   start_stop_flag = 0
-
-def conveyor_restart():
-  set_mstate(start_state)
 
 def conveyor_start():
   global start_stop_flag
