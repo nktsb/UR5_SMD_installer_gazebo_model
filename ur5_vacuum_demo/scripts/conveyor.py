@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 import sys
 import rospy
 import rospkg
@@ -6,6 +7,8 @@ import moveit_commander
 import moveit_msgs.msg
 import geometry_msgs.msg
 import time
+import random
+from math import pi
 
 from gazebo_msgs.msg import ModelState
 from gazebo_msgs.srv import SetModelState
@@ -42,13 +45,38 @@ def get_mstate(obj_name):
   except rospy.ServiceException:
     print("Service failed")
 
+def spawn_pcb(pcb_name):
+  yaw = round(random.uniform(0, pi), 3)
+  os.system('roslaunch ur5_vacuum_demo pcb.launch pcb_name:="' + str(pcb_name) + 
+              '" yaw:="' + str(yaw) + '"')
+
+task_counter = 0
+pcb_counter = 0
+
 def conveyor_task():
-  while start_stop_flag == 1:
-    for obj in conveyor_objects:
-      actual_state = get_mstate(obj)
-      actual_state.pose.position.y -= 0.00025
-      set_mstate(obj, actual_state)
-      time.sleep(0.0025)
+  global task_counter
+  global pcb_counter
+
+  while True:
+    if start_stop_flag == 1:
+
+      if task_counter == 0
+        if pcb_counter < 3:
+          pcb_counter += 1
+          new_pcb = 'pcb_' + str(pcb_counter)
+          spawn_pcb(new_pcb)
+          put_object_on_conveyor(new_pcb)
+
+      task_counter += 1
+      if task_counter == 1000:
+        task_counter = 0
+
+      for obj in conveyor_objects:
+        actual_state = get_mstate(obj)
+        actual_state.pose.position.y -= 0.00025
+        set_mstate(obj, actual_state)
+
+      time.sleep(0.0025/len(conveyor_objects))
 
 def conveyor_init():
   global start_stop_flag

@@ -70,8 +70,8 @@ def load_coordinates():
 def spawn_components(comp_name_1, comp_name_2):
   yaw_1 = round(random.uniform(0, pi), 3)
   yaw_2 = round(random.uniform(0, pi), 3)
-  os.system('roslaunch ur5_vacuum_demo components.launch comp_1_name:="comp_' + str(comp_name_1) + 
-              '" comp_2_name:="comp_' + str(comp_name_2) + '" yaw_2:="' + str(yaw_2) + '" yaw_1:="' + str(yaw_1) + '"')
+  os.system('roslaunch ur5_vacuum_demo components.launch comp_1_name:="' + str(comp_name_1) + 
+              '" comp_2_name:="' + str(comp_name_2) + '" yaw_2:="' + str(yaw_2) + '" yaw_1:="' + str(yaw_1) + '"')
 
 def algorithm():
   counter = 0
@@ -84,8 +84,9 @@ def algorithm():
           break
         box_num += 1
 
-      comp_name_1 = counter + 2
-      comp_name_2 = counter + 1
+      # components to spawn
+      comp_name_1 = 'comp_' + str(counter + 2)
+      comp_name_2 = 'comp_' + str(counter + 1)
       
       if not counter % 2:
         spawn_components(comp_name_1, comp_name_2)

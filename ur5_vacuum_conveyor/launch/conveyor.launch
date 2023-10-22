@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
     
-    <node name="conveyor" pkg="gazebo_ros" type="spawn_model" args="-file $(find ur5_vacuum_conveyor)/urdf/ur5_vacuum_conveyor.urdf.xacro -urdf -x -0.3 -y 2 -z 0 -model conveyor" />
+    <node name="conveyor" pkg="gazebo_ros" type="spawn_model" args="-file $(find ur5_vacuum_conveyor)/urdf/ur5_vacuum_conveyor.urdf.xacro -urdf -x -0.3 -y 0.2 -z 0 -model conveyor" />
 
 </launch>
