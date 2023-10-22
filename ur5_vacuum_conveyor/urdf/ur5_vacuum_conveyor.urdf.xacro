@@ -27,17 +27,28 @@ name="ur5_vacuum_conveyor">
 </link>
 
 <gazebo reference="conveyor_base">
-  <mu1>0</mu1>
-  <mu2>0</mu2>
+  <mu1>1</mu1>
+  <mu2>1</mu2>
   <material>Gazebo/FlatBlack</material>
 </gazebo>
 
 <link name="world" />
-  <joint name="conveyor_joint" type="prismatic">
-    <parent link="world" />
-    <child link = "conveyor_base" />
-    <origin xyz="0 0 0.05" rpy="0.0 0.0 0.0" />
-    <axis xyz="0 1 0"/>
-    <limit upper = "0" lower="-4" effort="1000" velocity="0.2"/>
+<joint name="conveyor_joint" type="prismatic">
+  <parent link="world" />
+  <child link = "conveyor_base" />
+  <origin xyz="0 0 0.05" rpy="0.0 0.0 0.0" />
+  <axis xyz="0 1 0"/>
+  <limit upper = "0" lower="-4" effort="1" velocity="1"/>
+</joint>
+
+<transmission name="conveyor_joint_trans">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="conveyor_joint">
+    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
   </joint>
+  <actuator name="conveyor_motor">
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
 </robot>
