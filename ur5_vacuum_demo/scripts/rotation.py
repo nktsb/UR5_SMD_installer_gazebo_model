@@ -8,11 +8,12 @@ import geometry_msgs.msg
 import csv
 
 from tf.transformations import quaternion_from_euler
+from tf.transformations import euler_from_quaternion
 from gazebo_msgs.msg import ModelState
 from gazebo_msgs.srv import SetModelState
 from gazebo_msgs.srv import GetModelState
 
-def set_state(model_name, state, roll, pitch, yaw):
+def set_angle(model_name, state, roll, pitch, yaw):
   goal_state = ModelState()
   goal_state.model_name = model_name
   goal_state.pose.position = state.pose.position
@@ -32,11 +33,13 @@ def set_state(model_name, state, roll, pitch, yaw):
   except rospy.ServiceException:
     print("Service failed")
 
-def get_state(model_name):
+def get_angle(model_name):
   rospy.wait_for_service('/gazebo/get_model_state')
   try:
     get_state = rospy.ServiceProxy('/gazebo/get_model_state', GetModelState)
     state = get_state(model_name, 'world')
-    return state
+    roll, pitch, yaw = euler_from_quaternion([state.pose.orientation.x, state.pose.orientation.y, 
+    				state.pose.orientation.z, state.pose.orientation.w])
+    return state, roll, pitch, yaw
   except rospy.ServiceException:
     print("Service failed")

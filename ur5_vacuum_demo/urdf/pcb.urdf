@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<robot name="pcb">
+  <!-- <link name="world"/> -->
+  <link name="pcb">
+    <visual>
+      <geometry>
+        <mesh filename="package://ur5_vacuum_demo/urdf/models/board.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://ur5_vacuum_demo/urdf/models/board.stl" scale="0.001 0.001 0.001"  />
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1" />
+      <inertia ixx="1" ixy="0.0" ixz="0.0" 
+               iyy="1" iyz="0.0" 
+               izz="1" />
+    </inertial>
+  </link>
+<!--   <joint name="pcb_joint" type="prismatic">
+    <parent link="world" />
+    <child link = "pcb" />
+    <origin xyz="0 0 0" rpy="0.0 0.0 0.0" />
+    <limit upper="10" lower="-10" effort="1" velocity="1"/>
+    <axis xyz="1 1 0"/>
+  </joint> -->
+  <gazebo reference="pcb">
+    <material>Gazebo/Orange</material>
+    <mu1>5</mu1>
+    <mu2>5</mu2>
+  </gazebo>
+</robot>
+

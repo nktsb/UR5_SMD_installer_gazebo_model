@@ -4,7 +4,7 @@
        
   <xacro:include filename="$(find ur_description)/urdf/common.gazebo.xacro" />
   <xacro:include filename="$(find ur_description)/urdf/ur5.urdf.xacro" />
- 
+
   <!-- arm -->
   <xacro:ur5_robot prefix="" joint_limited="true"
     shoulder_pan_lower_limit="${-2*pi}" shoulder_pan_upper_limit="${2*pi}"
@@ -76,12 +76,15 @@
     <origin xyz="0 0.6 0.01" rpy="0 ${-pi/2} ${-pi/2}" />
   </joint>
   <link name="camera" />
-
-  <xacro:include filename="$(find ur5_vacuum_robot)/urdf/ur5_gazebo.xacro" />
+ 
   <link name="world" />
-  <joint name="world_joint" type="fixed">
+
+  <joint name="world_joint_ur" type="fixed">
     <parent link="world" />
     <child link = "base_link" />
     <origin xyz="0 -0.3 0.105" rpy="0.0 0.0 0.0" />
   </joint>
+
+  <xacro:include filename="$(find ur5_vacuum_robot)/urdf/ur5_gazebo.xacro" />
+
 </robot>

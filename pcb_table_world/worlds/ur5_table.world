@@ -12,19 +12,19 @@
 
     <model name="table">
       <static>true</static>
-      <pose>0 0 0.05 0 0 0</pose>
+      <pose>0.15 0 0.05 0 0 0</pose>
       <link name="link">
         <collision name="collision">
           <geometry>
             <box>
-              <size>1 1 0.1</size>
+              <size>0.5 1 0.1</size>
             </box>
           </geometry>
         </collision>
         <visual name="visual">
           <geometry>
             <box>
-              <size>1 1 0.1</size>
+              <size>0.5 1 0.1</size>
             </box>
           </geometry>
           <material>
@@ -118,7 +118,7 @@
         </visual>
       </link>
     </model>
-    <model name="board">
+    <!--model name="board">
       <static>true</static>
       <pose>-0.3 0.25 0.10075 0 0 0</pose>
       <link name="link">
@@ -144,6 +144,6 @@
           <meta> <layer> 1 </layer></meta>
         </visual>
       </link>
-    </model>
+    </model-->
   </world>
 </sdf>
