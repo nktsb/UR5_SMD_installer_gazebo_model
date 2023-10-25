@@ -65,11 +65,11 @@ def conveyor_task():
     if start_stop_flag == 1:
 
       if task_counter == 0:
-        if pcb_counter < 3:
-          pcb_counter += 1
-          new_pcb = 'pcb_' + str(pcb_counter)
-          spawn_pcb(new_pcb)
-          put_object_on_conveyor(new_pcb)
+        # if pcb_counter < 3:
+        pcb_counter += 1
+        new_pcb = 'pcb_' + str(pcb_counter)
+        spawn_pcb(new_pcb)
+        put_object_on_conveyor(new_pcb)
 
       task_counter += 1
       if task_counter == 800:
