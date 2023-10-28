@@ -8,13 +8,18 @@ import random
 import csv
 import numpy as np
 from tf.transformations import euler_from_quaternion
-import moving
-import rectangle
-import rotation
-import gripper
 import roslaunch
 import threading
-import conveyor as cn
+
+from mstates import ModelPose
+from conveyor import Conveyor
+from gripper import Gripper
+from moving import SMD_InstallerMoveSet
+from cv_camera import Camera
+
+conveyor = Conveyor()
+moving = SMD_InstallerMoveSet()
+table_cam = Camera()
 
 accuracy = 3
 
@@ -23,13 +28,15 @@ boxes = [
   'x': 0.3, 
   'y': 0.35, 
   'z': 0.2, 
-  'type': 'R'
+  'type': 'R',
+  'component': ""
 }, 
 {
   'x': 0.3, 
   'y': 0.2, 
   'z': 0.2, 
-  'type': 'C'
+  'type': 'C',
+  'component': ""
 }
 ] # boxes coordinates and components type
 
@@ -67,102 +74,96 @@ def load_coordinates():
       cnt += 1
   # print(pcb_components)
 
-def spawn_components(comp_name_1, comp_name_2):
+def spawn_components(component_1, component_2):
   yaw_1 = round(random.uniform(0, pi), 3)
   yaw_2 = round(random.uniform(0, pi), 3)
-  os.system('roslaunch ur5_vacuum_demo components.launch comp_1_name:="' + str(comp_name_1) + 
-              '" comp_2_name:="' + str(comp_name_2) + '" yaw_2:="' + str(yaw_2) + '" yaw_1:="' + str(yaw_1) + '"')
+  os.system('roslaunch ur5_vacuum_demo components.launch comp_1_name:="' + str(component_1) + 
+              '" comp_2_name:="' + str(component_2) + '" yaw_1:="' + str(yaw_2) + '" yaw_2:="' + str(yaw_1) + '"')
+
+def place_comp_to_boxes(comp_1_type, comp_2_type, index):
+
+    component_1 = 'comp_' + str(index + 1)
+    component_2 = 'comp_' + str(index + 2)
+
+    for box in boxes:
+      if(box['type'] == comp_1_type):
+        boxes[boxes.index(box)]['component'] = component_1
+      elif(box['type'] == comp_2_type):
+        boxes[boxes.index(box)]['component'] = component_2
+
+    spawn_components(component_2, component_1)
+
+def find_box(type):
+  for box in boxes:
+    if(box['type'] == type):
+      return box
 
 def algorithm():
+  conveyor.start()
   counter = 0
-  succes = 0 #number of succesfully installed components
+  succes = 0
+
   while True:
     if pcb_components[counter]['status'] == 0: #comonent still wasn't isntalled
-      box_num = 0
+
+      if counter % 2 == 0:
+        place_comp_to_boxes(pcb_components[counter]['type'], 
+                            pcb_components[counter + 1]['type'], 
+                            counter)
+
+      box = find_box(pcb_components[counter]['type'])
+      component = box['component']
+      goal_angle = pcb_components[counter]['angle']
+      goal_angle = round(float(goal_angle), accuracy)
+
+      moving.move_and_take(box) #go to box
+      moving.move_arm(camera_stand) #go to camera
+
+      conveyor.stop()
+      table_cam.processing_en() #enable openCV angle determining
+
       while True:
-        if pcb_components[counter]['type'] == boxes[box_num]['type']: #find component type (number of box)
-          break
-        box_num += 1
 
-      # components to spawn
-      comp_name_1 = 'comp_' + str(counter + 2)
-      comp_name_2 = 'comp_' + str(counter + 1)
-      
-      if not counter % 2:
-        spawn_components(comp_name_1, comp_name_2)
+        if table_cam.get_new_val_flg() and table_cam.get_new_val_flg() != 0xDEAD:
 
-      comp_name = 'comp_' + str(counter + 1) #name of model in gazebo
-      comp_angle = pcb_components[counter]['angle'] #goal angle
-      comp_angle = round(float(comp_angle), accuracy)
+          table_cam.clr_new_val_flg()
 
-      # print("Components spawned")
-      moving.move_arm(moving.up(boxes[box_num])) #go to box
-      moving.move_arm(moving.down(boxes[box_num])) #move gripper down
-      gripper.grasp_on() #turn on gripper
-      moving.move_arm(moving.up(boxes[box_num])) #move gripper up
-
-      moving.move_arm(moving.goal_pose_calc(camera_stand)) #go to camera
-  
-      rectangle.processing_en() #enable openCV angle determining
-      
-      while True:
-        if rectangle.new_val or rectangle.rectangle: #new value or error code
-          break
-
-      rectangle.new_val = 0
-
-      actual_state,roll, pitch, yaw = rotation.get_angle(comp_name)
-      
-      angle = yaw
-
-      if rectangle.rectangle != 0xFE: #there is component
-
-        while True:
-          if rectangle.new_val:
-            rectangle.new_val = 0
-
-            actual_state, roll, pitch, yaw = rotation.get_angle(comp_name)
-            
-            angle += (comp_angle - yaw)*0.2
-            #rospy.sleep(0.5)
+          cv_angle = round(table_cam.get_cv_angle(), accuracy)
           
-            rotation.set_angle(comp_name, actual_state, roll, pitch, angle) #rotate component
-            if round(rectangle.rectangle, accuracy) == comp_angle or round(rectangle.rectangle, accuracy) == (comp_angle + round(pi, accuracy)):
-              break
-          # if angle >= round(pi*2, 3):
-          #   angle = 0
-          print(comp_angle, round(rectangle.rectangle, accuracy), round(angle, accuracy), end = '\r')
-          
+          if cv_angle == goal_angle or cv_angle == (goal_angle + round(pi, accuracy)):
+            break
 
-        rectangle.processing_dis()
+          moving.rotate_gripper(component, goal_angle)
+        
+        elif table_cam.get_new_val_flg() == 0xDEAD:   
+          table_cam.clr_new_val_flg()     
+          break;
 
-        comp_coord = {
-          'x': float(pcb_components[counter]['x']),
-          'y': float(pcb_components[counter]['y']),
-          'z': 0.2 # Z axis for component drop
-        }
+      table_cam.processing_dis()
+      conveyor.start()
 
-        comp_coord['x'] += pcb_origin['x']
-        comp_coord['y'] += pcb_origin['y']
+      component_xyz = {
+        'x': float(pcb_components[counter]['x']),
+        'y': float(pcb_components[counter]['y']),
+        'z': 0.2 # Z axis for component drop
+      }
 
-        moving.move_arm(moving.up(comp_coord))
-        moving.move_arm(moving.down(comp_coord))
-        gripper.grasp_off()
-        moving.move_arm(moving.up(comp_coord))
+      component_xyz['x'] += pcb_origin['x']
+      component_xyz['y'] += pcb_origin['y']
 
-        pcb_components[counter]['status'] = 1 #install current component ok
+      moving.move_and_release(component_xyz)
+      conveyor.put_object(component)
 
-        cn.put_object_on_conveyor(comp_name)
+      pcb_components[counter]['status'] = 1 #install current component ok
 
-        succes += 1
-      else:
-        rectangle.online_en = 0
+      succes += 1
 
     counter += 1
+
     if counter >= len(pcb_components): # try again if some component wasn't succesfully installed
       counter = 0
     if succes == len(pcb_components): # all components installed - finish algorithm
-      moving.move_arm(moving.goal_pose_calc(camera_stand))
+      moving.move_arm(camera_stand)
       quit()
 
 def alg_init():
@@ -172,16 +173,11 @@ def alg_init():
 
 if __name__ == '__main__':
   try:
-    rectangle.cam_init() # init camera and openCV
-    moving.init() #init moveit
     
-    cn.conveyor_init()
-    cn.conveyor_start()
-
     alg_init()
 
     algorithm_task = threading.Thread(target = algorithm)
-    conveyor_task = threading.Thread(target = cn.conveyor_task)
+    conveyor_task = threading.Thread(target = conveyor.task)
     
     conveyor_task.start()
     algorithm_task.start()
