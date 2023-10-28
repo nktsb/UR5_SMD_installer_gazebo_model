@@ -13,6 +13,8 @@ from math import pi
 
 from mstates import ModelPose
 
+SPAWNER_PERIOD = 5
+
 class Conveyor:
   def __init__(self):
     self.start_stop_flag = 0
@@ -22,7 +24,7 @@ class Conveyor:
     self.pcb_counter = 0
     self.conveyor_objects=[]
     self.obj_states = ModelPose()
-    self.cycle_spawn_pcb()
+    self.spawn_timer = threading.Timer(SPAWNER_PERIOD, self.cycle_spawn_pcb)
 
   def cycle_spawn_pcb(self):
     if self.start_stop_flag == 1:
@@ -31,8 +33,8 @@ class Conveyor:
       self.spawn_pcb(new_pcb)
       self.put_object(new_pcb)
 
-    spawn_timer = threading.Timer(10, self.cycle_spawn_pcb)
-    spawn_timer.start()
+    self.spawn_timer = threading.Timer(SPAWNER_PERIOD, self.cycle_spawn_pcb)
+    self.spawn_timer.start()
 
   def put_object(self, object):
     self.conveyor_objects.append(object)
@@ -61,9 +63,12 @@ class Conveyor:
 
   def start(self):
     self.start_stop_flag = 1
+    self.spawn_timer = threading.Timer(SPAWNER_PERIOD, self.cycle_spawn_pcb)
+    self.spawn_timer.start()
 
   def stop(self):
     self.start_stop_flag = 0
+    self.spawn_timer.cancel()
 
 if __name__ == "__main__":
   test = Conveyor()
