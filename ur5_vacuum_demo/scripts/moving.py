@@ -19,13 +19,13 @@ class SMD_InstallerMoveSet:
     moveit_commander.roscpp_initialize(sys.argv) 
 
   def move_and_take(self, xyz):
-    self.move_arm(self.goal_up(xyz))
+    self.move_arm(xyz)
     self.move_arm(self.goal_down(xyz))
     self.gripper.grasp_on()
     self.move_arm(self.goal_up(xyz))
 
   def move_and_release(self, xyz):
-    self.move_arm(self.goal_up(xyz))
+    self.move_arm(xyz)
     self.move_arm(self.goal_down(xyz))
     self.gripper.grasp_off()
     self.move_arm(self.goal_up(xyz))

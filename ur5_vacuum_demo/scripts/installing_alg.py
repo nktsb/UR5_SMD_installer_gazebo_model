@@ -10,6 +10,7 @@ import numpy as np
 from tf.transformations import euler_from_quaternion
 import roslaunch
 import threading
+import time
 
 from mstates import ModelPose
 from conveyor import Conveyor
@@ -27,14 +28,14 @@ boxes = [
 {
   'x': 0.3, 
   'y': 0.35, 
-  'z': 0.2, 
+  'z': 0.225, 
   'type': 'R',
   'component': ""
 }, 
 {
   'x': 0.3, 
   'y': 0.2, 
-  'z': 0.2, 
+  'z': 0.225, 
   'type': 'C',
   'component': ""
 }
@@ -50,7 +51,7 @@ camera_stand = {
 pcb_origin = {
   'x': -0.34, 
   'y': 0.175, 
-  'z':0.21
+  'z':0.22
 }
 
 pcb_components = list()
@@ -100,16 +101,20 @@ def find_box(type):
 
 def algorithm():
   conveyor.start()
-  counter = 0
-  succes = 0
+  time.sleep(10)
+  model_counter = 0
 
   while True:
-    if pcb_components[counter]['status'] == 0: #comonent still wasn't isntalled
+    counter = 0
+    succes = 0
+
+    while True:
 
       if counter % 2 == 0:
+        conveyor.stop()
         place_comp_to_boxes(pcb_components[counter]['type'], 
                             pcb_components[counter + 1]['type'], 
-                            counter)
+                            model_counter)
 
       box = find_box(pcb_components[counter]['type'])
       component = box['component']
@@ -119,7 +124,7 @@ def algorithm():
       moving.move_and_take(box) #go to box
       moving.move_arm(camera_stand) #go to camera
 
-      conveyor.stop()
+      # conveyor.stop()
       table_cam.processing_en() #enable openCV angle determining
 
       while True:
@@ -140,16 +145,16 @@ def algorithm():
           break;
 
       table_cam.processing_dis()
-      conveyor.start()
 
       component_xyz = {
         'x': float(pcb_components[counter]['x']),
         'y': float(pcb_components[counter]['y']),
-        'z': 0.2 # Z axis for component drop
+        'z': 0
       }
 
       component_xyz['x'] += pcb_origin['x']
       component_xyz['y'] += pcb_origin['y']
+      component_xyz['z'] = pcb_origin['z']
 
       moving.move_and_release(component_xyz)
       conveyor.put_object(component)
@@ -158,13 +163,16 @@ def algorithm():
 
       succes += 1
 
-    counter += 1
+      counter += 1
+      model_counter += 1
 
-    if counter >= len(pcb_components): # try again if some component wasn't succesfully installed
-      counter = 0
-    if succes == len(pcb_components): # all components installed - finish algorithm
-      moving.move_arm(camera_stand)
-      quit()
+      if succes == len(pcb_components): # all components installed - finish algorithm
+        # moving.move_arm(camera_stand)
+        break
+
+    conveyor.start()
+    time.sleep(8)
+
 
 def alg_init():
   load_coordinates()

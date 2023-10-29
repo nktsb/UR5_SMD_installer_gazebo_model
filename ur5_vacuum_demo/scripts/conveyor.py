@@ -13,7 +13,8 @@ from math import pi
 
 from mstates import ModelPose
 
-SPAWNER_PERIOD = 5
+SPAWNER_PERIOD = 10
+TIMER_PERIOD = 0.5
 
 class Conveyor:
   def __init__(self):
@@ -23,17 +24,23 @@ class Conveyor:
     self.task_counter = 0
     self.pcb_counter = 0
     self.conveyor_objects=[]
-    self.spawn_timer = threading.Timer(SPAWNER_PERIOD, self.cycle_spawn_pcb)
+    self.timer_counter = 0
+    self.spawn_timer = threading.Timer(TIMER_PERIOD, self.cycle_spawn_pcb)
 
   def cycle_spawn_pcb(self):
-    if self.start_stop_flag == 1:
-      self.pcb_counter += 1
-      new_pcb = 'pcb_' + str(self.pcb_counter)
-      self.spawn_pcb(new_pcb)
-      self.put_object(new_pcb)
+    if self.start_stop_flag == 1: 
+      if self.timer_counter == 0:
+        self.pcb_counter += 1
+        new_pcb = 'pcb_' + str(self.pcb_counter)
+        self.spawn_pcb(new_pcb)
+        self.put_object(new_pcb)
 
-      self.spawn_timer = threading.Timer(SPAWNER_PERIOD, self.cycle_spawn_pcb)
-      self.spawn_timer.start()
+      self.timer_counter += 1
+      if self.timer_counter == SPAWNER_PERIOD / TIMER_PERIOD:
+        self.timer_counter = 0
+
+    self.spawn_timer = threading.Timer(TIMER_PERIOD, self.cycle_spawn_pcb)
+    self.spawn_timer.start()
 
   def put_object(self, object_name):
     state = ModelPose()
@@ -69,7 +76,7 @@ class Conveyor:
 
   def start(self):
     self.start_stop_flag = 1
-    self.spawn_timer = threading.Timer(SPAWNER_PERIOD, self.cycle_spawn_pcb)
+    self.spawn_timer = threading.Timer(TIMER_PERIOD, self.cycle_spawn_pcb)
     self.spawn_timer.start()
 
   def stop(self):
