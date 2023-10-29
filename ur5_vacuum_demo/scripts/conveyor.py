@@ -23,7 +23,6 @@ class Conveyor:
     self.task_counter = 0
     self.pcb_counter = 0
     self.conveyor_objects=[]
-    self.obj_states = ModelPose()
     self.spawn_timer = threading.Timer(SPAWNER_PERIOD, self.cycle_spawn_pcb)
 
   def cycle_spawn_pcb(self):
@@ -36,7 +35,13 @@ class Conveyor:
       self.spawn_timer = threading.Timer(SPAWNER_PERIOD, self.cycle_spawn_pcb)
       self.spawn_timer.start()
 
-  def put_object(self, object):
+  def put_object(self, object_name):
+    state = ModelPose()
+    object_state = state.get_pose(object_name)
+    object = {
+      'name': object_name,
+      'state': object_state
+    }
     self.conveyor_objects.append(object)
 
   def remove_object(self, object):
@@ -51,14 +56,15 @@ class Conveyor:
     while True:
       if self.start_stop_flag == 1 and self.conveyor_objects:
         for obj in self.conveyor_objects:
-          actual_state = self.obj_states.get_pose(obj)
-          actual_state.pose.position.y -= 0.002
-          if actual_state.pose.position.y > -0.95:
-            self.obj_states.set_pose(obj, actual_state)
+          obj['state'].pose.position.y -= 0.004
+
+          if obj['state'].pose.position.y > -0.95:
+            state = ModelPose()
+            state.set_pose(obj['name'], obj['state'])
           else:
             self.remove_object(obj)
 
-        time.sleep(0.02/len(self.conveyor_objects))
+        time.sleep(0.04/len(self.conveyor_objects))
 
 
   def start(self):
