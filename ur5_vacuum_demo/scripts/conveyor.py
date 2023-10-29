@@ -33,8 +33,8 @@ class Conveyor:
       self.spawn_pcb(new_pcb)
       self.put_object(new_pcb)
 
-    self.spawn_timer = threading.Timer(SPAWNER_PERIOD, self.cycle_spawn_pcb)
-    self.spawn_timer.start()
+      self.spawn_timer = threading.Timer(SPAWNER_PERIOD, self.cycle_spawn_pcb)
+      self.spawn_timer.start()
 
   def put_object(self, object):
     self.conveyor_objects.append(object)
