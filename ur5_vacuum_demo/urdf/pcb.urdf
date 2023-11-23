@@ -4,14 +4,14 @@
   <link name="pcb">
     <visual>
       <geometry>
-        <mesh filename="package://ur5_vacuum_demo/urdf/models/textured_panel.dae" scale="0.3 0.3 0.3" />
+        <mesh filename="package://ur5_vacuum_demo/urdf/models/textured_panel.dae" scale="0.5 0.5 0.5" />
         <!--box size="0.1 0.06 0.002" /-->
       </geometry>
     </visual>
     <collision>
       <geometry>
       	<!--box size="0.08 0.12 0.002" /-->
-        <mesh filename="package://ur5_vacuum_demo/urdf/models/textured_panel.dae" scale="0.3 0.3 0.3" />
+        <mesh filename="package://ur5_vacuum_demo/urdf/models/textured_panel.dae" scale="0.5 0.5 0.5" />
       </geometry>
     </collision>
     <inertial>
