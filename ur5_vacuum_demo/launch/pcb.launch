@@ -3,6 +3,6 @@
     <arg name="pcb_name" default="pcb_1" />
     <arg name="yaw"	default="1.571" />
     
-    <node name="$(arg pcb_name)" pkg="gazebo_ros" type="spawn_model" args="-file $(find ur5_vacuum_demo)/urdf/pcb.urdf -urdf -x -0.4 -y 1 -z 0.12 -Y $(arg yaw) -model $(arg pcb_name)" />
+    <node name="$(arg pcb_name)" pkg="gazebo_ros" type="spawn_model" args="-file $(find ur5_vacuum_demo)/urdf/pcb.urdf -urdf -x -0.4 -y 1 -z 0.15 -Y $(arg yaw) -model $(arg pcb_name)" />
 
 </launch>

@@ -44,28 +44,26 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <cylinder radius="0.002" length="0.002"/>
+        <cylinder radius="0.001" length="0.0005"/>
       </geometry>
     </visual>
-    
    <!-- <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <cylinder radius="0.004" length="0.002"/>
       </geometry>
     </collision> -->
-    
-    <xacro:cylinder_inertial radius="0.002" length="0.002" mass="0.01">
+    <xacro:cylinder_inertial radius="0.001" length="0.0005" mass="0.0001">
       <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
     </xacro:cylinder_inertial>
   </link>
 
   <joint name="gripper_joint" type="revolute">
-    <axis xyz="0 0 1" />
+    <axis xyz="0 0 0" />
     <parent link="vacuum_gripper_base" />
     <child link="vacuum_gripper" />
-    <origin rpy="0 0 0" xyz="0 0 0.0035" />
-    <limit effort="20" velocity="1.0" lower="0" upper="0" />
+    <origin rpy="0 0 0" xyz="0 0 0.00275" />
+    <limit effort="0.0001" velocity="0.001" lower="0" upper="0" />
   </joint>
 
   <!-- camera -->
