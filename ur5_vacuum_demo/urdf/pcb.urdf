@@ -5,14 +5,14 @@
     <visual>
       <origin xyz="-0.04 -0.06 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://ur5_vacuum_demo/urdf/models/board.stl" scale="0.001 0.001 0.001" />
+        <mesh filename="package://ur5_vacuum_demo/urdf/models/textured_panel.dae" scale="0.001 0.001 0.001" />
         <!--box size="0.1 0.06 0.002" /-->
       </geometry>
     </visual>
     <collision>
       <geometry>
-      	<box size="0.08 0.12 0.002" />
-	<!--mesh filename="package://ur5_vacuum_demo/urdf/models/board.stl" scale="0.001 0.001 0.001"  /-->
+      	<!--box size="0.08 0.12 0.002" /-->
+        <mesh filename="package://ur5_vacuum_demo/urdf/models/textured_panel.dae" scale="0.001 0.001 0.001" />
       </geometry>
     </collision>
     <inertial>
@@ -30,7 +30,6 @@
     <axis xyz="1 1 0"/>
   </joint> -->
   <gazebo reference="pcb">
-    <material>Gazebo/Orange</material>
     <mu1>5</mu1>
     <mu2>5</mu2>
   </gazebo>
