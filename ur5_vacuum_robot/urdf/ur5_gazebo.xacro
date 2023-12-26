@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 	
-	<gazebo reference="vacuum_gripper">
-		<light name='test_light' type='point'>
+	<gazebo reference="vacuum_gripper_base">
+		<light name='test_light' type='directional'>
 			<intensity>1</intensity>
-			<pose>0 0.02 0.001 0 0 0</pose>
+			<pose>0 0.075 0.045 1.57 0 0</pose>
 			<!--attenuation>
 				<range>0.001</range>
 				<linear>0.2</linear>
