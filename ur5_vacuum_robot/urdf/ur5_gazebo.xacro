@@ -3,9 +3,9 @@
 	
 	<gazebo reference="vacuum_gripper">
 		<light name='test_light' type='point'>
-			<intensity>0.75</intensity>
-			<!--pose>0 0 0.001 0 3.14 0</pose>
-			<attenuation>
+			<intensity>1</intensity>
+			<pose>0 0.02 0.001 0 0 0</pose>
+			<!--attenuation>
 				<range>0.001</range>
 				<linear>0.2</linear>
 				<constant>0.8</constant>
