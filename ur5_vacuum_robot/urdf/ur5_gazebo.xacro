@@ -1,17 +1,37 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
+	
+	<gazebo reference="vacuum_gripper">
+		<light name='test_light' type='point'>
+			<intensity>0.75</intensity>
+			<!--pose>0 0 0.001 0 3.14 0</pose>
+			<attenuation>
+				<range>0.001</range>
+				<linear>0.2</linear>
+				<constant>0.8</constant>
+			</attenuation-->
+		</light>
+		<plugin name='light_control' filename='libFlashLightPlugin.so'>
+			<enable>true</enable>
+			<light>
+				<id>test_light</id>
+				<duration>1</duration>
+				<interval>0</interval>
+			</light>
+		</plugin>
+		<selfCollide>false</selfCollide>
+	</gazebo>
+	<gazebo>
+		<plugin name="gazebo_ros_vacuum_gripper" filename="libgazebo_ros_vacuum_gripper.so">
+			<robotNamespace>/ur5_sub/vacuum_gripper</robotNamespace>
+			<bodyName>vacuum_gripper</bodyName>
+			<topicName>grasping</topicName>
+			<maxForce>0.0001</maxForce>
+			<maxDistance>0.001</maxDistance>
+			<minDistance>0.00001</minDistance>
+		</plugin>
 
-    <gazebo>
-      <plugin name="gazebo_ros_vacuum_gripper" filename="libgazebo_ros_vacuum_gripper.so">
-        <robotNamespace>/ur5_sub/vacuum_gripper</robotNamespace>
-        <bodyName>vacuum_gripper</bodyName>
-        <topicName>grasping</topicName>
-        <maxForce>0.0001</maxForce>
-        <maxDistance>0.001</maxDistance>
-        <minDistance>0.00001</minDistance>
-      </plugin>
-    
-    </gazebo>
+	</gazebo>
 
     <gazebo reference="camera">
       <sensor type="camera" name="camera">

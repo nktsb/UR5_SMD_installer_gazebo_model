@@ -40,9 +40,9 @@ class Camera:
             image = orig_image[80:400, 80:400] #crop
             # cv2.imshow("Crop", image)
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #grayscale
-            cv2.imshow("Gray", gray)
+            # cv2.imshow("Gray", gray)
             blur = cv2.GaussianBlur(gray, (9,9), 0)
-            cv2.imshow("Blur", blur)
+            # cv2.imshow("Blur", blur)
             thresh = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 101, 3)
             
             cv2.imshow("Processed", thresh)
