@@ -48,6 +48,12 @@ camera_stand = {
   'z': 0.22
 }
 
+wait_pcb_place = {
+  'x': -0.44, 
+  'y': 0.175, 
+  'z':0.4
+}
+
 pcb_origin = {
   'x': -0.44, 
   'y': 0.175, 
@@ -101,9 +107,7 @@ def find_box(type):
 
 def algorithm():
   conveyor.start()
-  time.sleep(10)
   model_counter = 0
-
   while True:
     counter = 0
     succes = 0
@@ -111,6 +115,8 @@ def algorithm():
     while True:
 
       if counter % 2 == 0:
+        moving.move_arm(wait_pcb_place)
+        time.sleep(10)
         conveyor.stop()
         place_comp_to_boxes(pcb_components[counter]['type'], 
                             pcb_components[counter + 1]['type'], 
