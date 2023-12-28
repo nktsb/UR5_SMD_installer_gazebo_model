@@ -39,7 +39,6 @@ class Camera:
         self.new_val_flg = 0
 
     def gripper_callback(self, data):
-        print("Gripper")
         if self.online_en == 1:
             orig_image = self.bridge.imgmsg_to_cv2(data, desired_encoding="bgr8")
             # cv2.imshow("Orig", orig_image)
@@ -74,10 +73,8 @@ class Camera:
 
             cv2.imshow("Gripper image", orig_image)
             cv2.waitKey(100)
-            print("quit gripper")
 
     def table_callback(self, data):
-        print("Table")
         if self.online_en == 1:
             orig_image = self.bridge.imgmsg_to_cv2(data, desired_encoding="bgr8")
             # cv2.imshow("Orig", orig_image)
@@ -109,7 +106,6 @@ class Camera:
                 print("No components here")
             # cv2.imshow("Table image", image)
             cv2.waitKey(100)
-            print("quit table")
 
     def box_center_calc(self, points):
         x1, y1 = points[0]
