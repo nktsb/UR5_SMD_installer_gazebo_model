@@ -9,8 +9,8 @@
 
   <gazebo reference="gripper_camera">
     <sensor type="camera" name="gripper_camera">
-      <update_rate>0.0</update_rate>
-      <camera name="camera">
+      <update_rate>30.0</update_rate>
+      <camera name="gripper_camera">
         <horizontal_fov>${radians(100)}</horizontal_fov>
         <image>
           <width>480</width>

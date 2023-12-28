@@ -50,7 +50,7 @@ camera_stand = {
 }
 
 wait_pcb_place = {
-  'x': -0.44, 
+  'x': -0.40, 
   'y': 0.175, 
   'z':0.35
 }
@@ -118,7 +118,10 @@ def algorithm():
         moving.move_arm(wait_pcb_place)
         conveyor.start()
         gripper_cam.processing_en()
-        time.sleep(10)
+        while True:
+          if gripper_cam.get_new_val_flg():
+            gripper_cam.clr_new_val_flg()
+            break;
         gripper_cam.processing_dis()
         conveyor.stop()
         place_comp_to_boxes(pcb_components[counter]['type'], 
@@ -137,7 +140,6 @@ def algorithm():
       table_cam.processing_en() #enable openCV angle determining
 
       while True:
-
         if table_cam.get_new_val_flg() and table_cam.get_new_val_flg() != 0xDEAD:
 
           table_cam.clr_new_val_flg()

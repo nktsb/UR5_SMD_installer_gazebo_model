@@ -13,7 +13,7 @@ from math import pi
 
 from mstates import ModelPose
 
-SPAWNER_PERIOD = 10
+SPAWNER_PERIOD = 20
 TIMER_PERIOD = 0.5
 
 class Conveyor:
