@@ -51,7 +51,7 @@ camera_stand = {
 wait_pcb_place = {
   'x': -0.44, 
   'y': 0.175, 
-  'z':0.4
+  'z':0.35
 }
 
 pcb_origin = {
