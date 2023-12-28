@@ -47,9 +47,14 @@ class SMD_InstallerMoveSet:
     box_pose.pose.orientation.w = 1.0
     box_name = "table"
     scene.add_box(box_name, box_pose, size=(1.0, 1.0, 0.1))
+    box_name = "ceiling"
+    box_pose.pose.position.z = 0.75
+    scene.add_box(box_name, box_pose, size=(1.0, 1.0, 0.1))
     box_name = "wall"
+    box_pose.pose.position.z = 0.05
     box_pose.pose.position.y = -0.5
     scene.add_box(box_name, box_pose, size=(1.0, 0.01, 1.0))
+
 
   def goal_up(self, xyz):
     xyz['z'] += 0.015

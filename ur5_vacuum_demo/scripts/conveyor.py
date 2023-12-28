@@ -24,23 +24,6 @@ class Conveyor:
     self.task_counter = 0
     self.pcb_counter = 0
     self.conveyor_objects=[]
-    self.timer_counter = 0
-    self.spawn_timer = threading.Timer(TIMER_PERIOD, self.cycle_spawn_pcb)
-
-  def cycle_spawn_pcb(self):
-    if self.start_stop_flag == 1: 
-      if self.timer_counter == 0:
-        self.pcb_counter += 1
-        new_pcb = 'pcb_' + str(self.pcb_counter)
-        self.spawn_pcb(new_pcb)
-        self.put_object(new_pcb)
-
-      self.timer_counter += 1
-      if self.timer_counter == SPAWNER_PERIOD / TIMER_PERIOD:
-        self.timer_counter = 0
-
-    self.spawn_timer = threading.Timer(TIMER_PERIOD, self.cycle_spawn_pcb)
-    self.spawn_timer.start()
 
   def put_object(self, object_name):
     state = ModelPose()
@@ -54,34 +37,34 @@ class Conveyor:
   def remove_object(self, object):
     self.conveyor_objects.remove(object)
 
-  def spawn_pcb(self, pcb_name):
+  def spawn_pcb(self):
+    pcb_name = 'pcb_' + str(self.pcb_counter)
+    self.pcb_counter += 1
     yaw = round(random.uniform(0, pi), 3)
     os.system('roslaunch ur5_vacuum_demo pcb.launch pcb_name:="' + str(pcb_name) + 
                 '" yaw:="' + str(yaw) + '"')
+    self.put_object(pcb_name)
 
   def task(self):
     while True:
       if self.start_stop_flag == 1 and self.conveyor_objects:
         for obj in self.conveyor_objects:
-          obj['state'].pose.position.y -= 0.004
+          obj['state'].pose.position.y -= 0.003 * len(self.conveyor_objects)
 
-          if obj['state'].pose.position.y > -0.95:
-            state = ModelPose()
-            state.set_pose(obj['name'], obj['state'])
-          else:
+          if obj['state'].pose.position.y <= -0.75:
+            obj['state'].pose.position.y = -10
             self.remove_object(obj)
-
-        time.sleep(0.04/len(self.conveyor_objects))
+         
+          state = ModelPose()
+          state.set_pose(obj['name'], obj['state'])
+        # time.sleep(0.1/len(self.conveyor_objects))
 
 
   def start(self):
     self.start_stop_flag = 1
-    self.spawn_timer = threading.Timer(TIMER_PERIOD, self.cycle_spawn_pcb)
-    self.spawn_timer.start()
 
   def stop(self):
     self.start_stop_flag = 0
-    self.spawn_timer.cancel()
 
 if __name__ == "__main__":
   test = Conveyor()

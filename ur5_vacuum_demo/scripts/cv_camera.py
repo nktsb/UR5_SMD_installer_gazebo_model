@@ -64,7 +64,7 @@ class Camera:
                         cv2.putText(image, (str(round(a))+"x"+str(round(b))), (box[1][0] + 5, box[1][1] + 5), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 210, 150), 3, cv2.LINE_AA)
                         cv2.drawContours(image, [box], 0, (255, 210, 150), 3)
 
-                        if (250 > center_y > 230) and (380 > center_x > 100):
+                        if (210 > center_y > 180) and (380 > center_x > 100):
                             # print("PCB found!")
                             self.new_val_flg = 1
             except:

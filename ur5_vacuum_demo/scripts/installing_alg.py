@@ -57,7 +57,7 @@ wait_pcb_place = {
 
 pcb_origin = {
   'x': -0.44, 
-  'y': 0.175, 
+  'y': 0.15, 
   'z':0.22
 }
 
@@ -116,7 +116,11 @@ def algorithm():
 
       if counter % 2 == 0:
         moving.move_arm(wait_pcb_place)
+
         conveyor.start()
+        while(len(conveyor.conveyor_objects)):
+          pass
+        conveyor.spawn_pcb()
         gripper_cam.processing_en()
         while True:
           if gripper_cam.get_new_val_flg():
@@ -133,6 +137,7 @@ def algorithm():
       goal_angle = pcb_components[counter]['angle']
       goal_angle = round(float(goal_angle), accuracy)
 
+      moving.move_arm(camera_stand) #go to camera
       moving.move_and_take(box) #go to box
       moving.move_arm(camera_stand) #go to camera
 
