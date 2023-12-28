@@ -40,8 +40,40 @@ class Camera:
     def gripper_callback(self, data):
         if self.online_en == 1:
             orig_image = self.bridge.imgmsg_to_cv2(data, desired_encoding="bgr8")
-            cv2.imshow("Orig", orig_image)
+            # cv2.imshow("Orig", orig_image)
+            gray = cv2.cvtColor(orig_image, cv2.COLOR_BGR2GRAY) #grayscale
+            # cv2.imshow("Gray", gray)
+            blur = cv2.GaussianBlur(gray, (9,9), 0)
+            # cv2.imshow("Blur", blur)
+            thresh = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 101, 3)
+            
+            # cv2.imshow("Processed", thresh)
+            
+            contours, hier = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+            try:
+                rect = cv2.minAreaRect(contours[0])
+                box = cv2.boxPoints(rect)
+                box = np.int0(box)
+                if len(box) == 4:
+                    self.angle = self.angle_calc(box)
+                    if self.angle != ERROR_CODE:
+                        self.new_val_flg = 1
+                    else:
+                        self.new_val_flg = ERROR_CODE
+
+                    cv2.putText(orig_image, str(round(self.angle, 3)), (box[1][0] + 5, box[1][1] + 5), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 210, 150), 3, cv2.LINE_AA)
+                    cv2.drawContours(orig_image, [box], 0, (255, 210, 150), 3)
+            except:
+                self.new_val_flg = ERROR_CODE
+                print("No components here")
+
+            cv2.imshow("gripper image", orig_image)
             cv2.waitKey(100)
+        else:
+            try:
+                cv2.destroyWindow("gripper image")
+            except:
+                pass
 
     def table_callback(self, data):
         if self.online_en == 1:
@@ -55,7 +87,7 @@ class Camera:
             # cv2.imshow("Blur", blur)
             thresh = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 101, 3)
             
-            cv2.imshow("Processed", thresh)
+            # cv2.imshow("Processed", thresh)
             
             contours, hier = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
             try:
@@ -75,10 +107,13 @@ class Camera:
                 self.new_val_flg = ERROR_CODE
                 print("No components here")
 
-            cv2.imshow("Final image", image)
+            cv2.imshow("table image", image)
             cv2.waitKey(100)
         else:
-            cv2.destroyAllWindows()
+            try:
+                cv2.destroyWindow("table image")
+            except:
+                pass
 
     def angle_calc(self, points):
         x1, y1 = points[0]
@@ -107,8 +142,10 @@ class Camera:
 if __name__ == '__main__':
     try:
         rospy.init_node('cam_read', anonymous=False)
-        test = Camera("/gripper_camera/image_raw", 'gripper')
-        test.processing_en()
+        test_1 = Camera("/camera/image_raw", 'table')
+        test_2 = Camera("/gripper_camera/image_raw", 'gripper')
+        # test_1.processing_en()
+        test_2.processing_en()
         while True:
             pass
     except KeyboardInterrupt:

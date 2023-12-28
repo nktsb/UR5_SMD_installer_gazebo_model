@@ -117,7 +117,9 @@ def algorithm():
       if counter % 2 == 0:
         moving.move_arm(wait_pcb_place)
         conveyor.start()
+        gripper_cam.processing_en()
         time.sleep(10)
+        gripper_cam.processing_dis()
         conveyor.stop()
         place_comp_to_boxes(pcb_components[counter]['type'], 
                             pcb_components[counter + 1]['type'], 

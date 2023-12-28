@@ -9,12 +9,12 @@
 
   <gazebo reference="gripper_camera">
     <sensor type="camera" name="gripper_camera">
-      <update_rate>30.0</update_rate>
-      <camera name="head">
+      <update_rate>0.0</update_rate>
+      <camera name="camera">
         <horizontal_fov>${radians(100)}</horizontal_fov>
         <image>
-          <width>800</width>
-          <height>800</height>
+          <width>480</width>
+          <height>480</height>
           <format>R8G8B8</format>
         </image>
         <clip>
@@ -43,7 +43,6 @@
       </plugin>
     </sensor>
   </gazebo>
-
 	<gazebo reference="gripper_camera">
 		<light name='test_light' type='directional'>
 			<intensity>1</intensity>
