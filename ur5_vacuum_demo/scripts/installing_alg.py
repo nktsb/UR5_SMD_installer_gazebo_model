@@ -20,7 +20,8 @@ from cv_camera import Camera
 
 conveyor = Conveyor()
 moving = SMD_InstallerMoveSet()
-table_cam = Camera()
+table_cam = Camera("/camera/image_raw", 'table')
+gripper_cam = Camera("/gripper_camera/image_raw", 'gripper')
 
 accuracy = 3
 
@@ -106,7 +107,6 @@ def find_box(type):
       return box
 
 def algorithm():
-  conveyor.start()
   model_counter = 0
   while True:
     counter = 0
@@ -116,6 +116,7 @@ def algorithm():
 
       if counter % 2 == 0:
         moving.move_arm(wait_pcb_place)
+        conveyor.start()
         time.sleep(10)
         conveyor.stop()
         place_comp_to_boxes(pcb_components[counter]['type'], 
@@ -175,9 +176,6 @@ def algorithm():
       if succes == len(pcb_components): # all components installed - finish algorithm
         # moving.move_arm(camera_stand)
         break
-
-    conveyor.start()
-    time.sleep(8)
 
 
 def alg_init():

@@ -11,11 +11,15 @@ from cv_bridge import CvBridge, CvBridgeError
 ERROR_CODE = 0xDEAD
 
 class Camera:
-    def __init__(self):
+    def __init__(self, topic_name, callback_idx):
+        callbacks_list = {
+            'table': self.table_callback, 
+            'gripper': self.gripper_callback
+        }
         self.online_en = 0
         self.new_val_flg = 0
         self.angle = 0
-        self.image_sub = rospy.Subscriber("/camera/image_raw", Image, self.camera_callback)
+        self.image_sub = rospy.Subscriber(topic_name, Image, callbacks_list[callback_idx])
         self.bridge = CvBridge()
 
     def get_cv_angle(self):
@@ -33,7 +37,13 @@ class Camera:
     def clr_new_val_flg(self):
         self.new_val_flg = 0
 
-    def camera_callback(self, data):
+    def gripper_callback(self, data):
+        if self.online_en == 1:
+            orig_image = self.bridge.imgmsg_to_cv2(data, desired_encoding="bgr8")
+            cv2.imshow("Orig", orig_image)
+            cv2.waitKey(100)
+
+    def table_callback(self, data):
         if self.online_en == 1:
             orig_image = self.bridge.imgmsg_to_cv2(data, desired_encoding="bgr8")
             # cv2.imshow("Orig", orig_image)
@@ -97,7 +107,7 @@ class Camera:
 if __name__ == '__main__':
     try:
         rospy.init_node('cam_read', anonymous=False)
-        test = Camera()
+        test = Camera("/gripper_camera/image_raw", 'gripper')
         test.processing_en()
         while True:
             pass
